@@ -1,0 +1,10 @@
+%{"decimal": {:hex, :decimal, "1.1.0"},
+  "earmark": {:hex, :earmark, "0.1.17"},
+  "ecto": {:hex, :ecto, "1.0.1"},
+  "ex_doc": {:hex, :ex_doc, "0.8.4"},
+  "guardian": {:hex, :guardian, "0.6.1"},
+  "joken": {:hex, :joken, "0.15.0"},
+  "poison": {:hex, :poison, "1.5.0"},
+  "poolboy": {:hex, :poolboy, "1.5.1"},
+  "postgrex": {:hex, :postgrex, "0.9.1"},
+  "uuid": {:hex, :uuid, "1.0.1"}}
