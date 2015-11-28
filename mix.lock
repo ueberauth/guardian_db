@@ -3,7 +3,7 @@
   "earmark": {:hex, :earmark, "0.1.17"},
   "ecto": {:hex, :ecto, "1.0.1"},
   "ex_doc": {:hex, :ex_doc, "0.8.4"},
-  "guardian": {:hex, :guardian, "0.7.2"},
+  "guardian": {:hex, :guardian, "0.7.4"},
   "joken": {:hex, :joken, "0.15.0"},
   "jose": {:hex, :jose, "1.4.1"},
   "plug": {:hex, :plug, "1.0.3"},

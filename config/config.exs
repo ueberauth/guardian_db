@@ -25,5 +25,4 @@ use Mix.Config
 
 config :guardian_db, GuardianDb, repo: %{}
 
-
-if Mix.env == :test, do: import_config "#{Mix.env}.exs"
+if Mix.env == :test or Mix.env == :docs, do: import_config "#{Mix.env}.exs"

@@ -17,7 +17,7 @@ defmodule GuardianDb.Mixfile do
   end
 
   def application do
-    [applications: [:ecto, :guardian]]
+    [applications: _applications(Mix.env)]
   end
 
   defp _applications(:test), do: [:postgrex, :ecto, :logger]
@@ -27,7 +27,7 @@ defmodule GuardianDb.Mixfile do
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~>0.7.2"},
+    [{:guardian, "~>0.7.3"},
      {:ecto, ">= 0.11.0"},
      {:postgrex, "~> 0.9.1"},
      {:ex_doc, "~> 0.8", only: :docs},

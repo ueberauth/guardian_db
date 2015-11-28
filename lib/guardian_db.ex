@@ -70,7 +70,7 @@ defmodule GuardianDb do
   def on_verify(claims, jwt) do
     case repo.get_by(Token, jti: Dict.get(claims, "jti")) do
       nil -> { :error, :token_not_found }
-      token -> { :ok, { claims, jwt } }
+      _token -> { :ok, { claims, jwt } }
     end
   end
 
