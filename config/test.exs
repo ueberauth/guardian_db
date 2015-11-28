@@ -1,7 +1,5 @@
 use Mix.Config
 
-config :joken, config_module: Guardian.JWT
-
 config :guardian, Guardian,
       issuer: "GuardianDb",
       secret_key: "woeirulkjosiujgwpeiojlkjw3prowiuefoskjd",

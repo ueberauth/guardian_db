@@ -1,10 +1,13 @@
-%{"decimal": {:hex, :decimal, "1.1.0"},
+%{"base64url": {:hex, :base64url, "0.0.1"},
+  "decimal": {:hex, :decimal, "1.1.0"},
   "earmark": {:hex, :earmark, "0.1.17"},
   "ecto": {:hex, :ecto, "1.0.1"},
   "ex_doc": {:hex, :ex_doc, "0.8.4"},
-  "guardian": {:hex, :guardian, "0.6.1"},
+  "guardian": {:hex, :guardian, "0.7.2"},
   "joken": {:hex, :joken, "0.15.0"},
+  "jose": {:hex, :jose, "1.4.1"},
+  "plug": {:hex, :plug, "1.0.3"},
   "poison": {:hex, :poison, "1.5.0"},
   "poolboy": {:hex, :poolboy, "1.5.1"},
   "postgrex": {:hex, :postgrex, "0.9.1"},
-  "uuid": {:hex, :uuid, "1.0.1"}}
+  "uuid": {:hex, :uuid, "1.1.1"}}

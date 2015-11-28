@@ -1,7 +1,7 @@
 defmodule GuardianDb.Mixfile do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.1.3"
 
   def project do
     [app: :guardian_db,
@@ -16,7 +16,7 @@ defmodule GuardianDb.Mixfile do
   end
 
   def application do
-    [applications: _applications(Mix.env)]
+    [applications: [:ecto, :guardian]]
   end
 
   defp _applications(:test), do: [:postgrex, :ecto, :logger]
@@ -26,16 +26,16 @@ defmodule GuardianDb.Mixfile do
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~>0.6.2"},
+    [{:guardian, "~>0.7.2"},
      {:ecto, ">= 0.11.0"},
-     {:postgrex, "~> 0.9.1", only: :test},
+     {:postgrex, "~> 0.9.1"},
      {:ex_doc, "~> 0.8", only: :docs},
      {:earmark, ">= 0.0.0", only: :docs}]
   end
 
   defp package do
     [
-      contributors: ["Daniel Neighman"],
+      maintainers: ["Daniel Neighman"],
       licenses: ["MIT"],
       links: %{github: "https://github.com/hassox/guardian_db"},
       files: ~w(lib) ++ ~w(CHANGELOG.md LICENSE mix.exs README.md)
