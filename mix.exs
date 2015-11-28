@@ -6,6 +6,7 @@ defmodule GuardianDb.Mixfile do
   def project do
     [app: :guardian_db,
      version: @version,
+     description: "DB tracking for token validity",
      elixir: "~> 1.0",
      elixirc_paths: _elixirc_paths(Mix.env),
      package: package,
