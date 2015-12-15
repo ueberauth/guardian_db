@@ -43,7 +43,7 @@ To use GuardianDb you'll need to add a migration
           add :aud, :string
           add :iss, :string
           add :sub, :string
-          add :exp, :integer
+          add :exp, :bigint
           add :jwt, :text
           add :claims, :text
           timestamps
