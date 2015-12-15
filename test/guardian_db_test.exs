@@ -10,7 +10,7 @@ defmodule GuardianDbTest do
           "aud" => "token",
           "sub" => "the_subject",
           "iss" => "the_issuer",
-          "exp" => Guardian.Utils.timestamp + 5000,
+          "exp" => Guardian.Utils.timestamp + 1_000_000_000,
         }
       }
     }
