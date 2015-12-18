@@ -1,13 +1,13 @@
 defmodule GuardianDb.Mixfile do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
 
   def project do
     [app: :guardian_db,
      version: @version,
      description: "DB tracking for token validity",
-     elixir: "~> 1.0",
+     elixir: "~> 1.1",
      elixirc_paths: _elixirc_paths(Mix.env),
      package: package,
      build_embedded: Mix.env == :prod,
