@@ -30,6 +30,7 @@ defmodule GuardianDbTest do
     assert token.sub == "the_subject"
     assert token.iss == "the_issuer"
     assert token.exp == context.claims["exp"]
+    assert token.claims == context.claims
   end
 
   test "on_verify with a record in the db", context do

@@ -29,7 +29,7 @@ defmodule GuardianDb do
       field :sub, :string
       field :exp, :integer
       field :jwt, :string
-      field :claims, :string
+      field :claims, :map
 
       timestamps
     end
@@ -38,8 +38,8 @@ defmodule GuardianDb do
     Create a new new token based on the JWT and decoded claims
     """
     def create!(claims, jwt) do
-      prepared_claims = claims |> Dict.put("jwt", jwt)
-      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [], [:jti, :aud, :iss, :sub, :exp, :jwt])
+      prepared_claims = claims |> Dict.put("jwt", jwt) |> Dict.put("claims", claims)
+      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [], [:jti, :aud, :iss, :sub, :exp, :jwt, :claims])
     end
 
     @doc """

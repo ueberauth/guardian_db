@@ -9,7 +9,7 @@ defmodule GuardianDb.Test.Repo.Migrations do
       add :sub, :string
       add :exp, :bigint
       add :jwt, :text
-      add :claims, :text
+      add :claims, :map
 
       timestamps
     end
