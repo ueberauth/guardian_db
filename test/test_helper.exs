@@ -1,7 +1,7 @@
 defmodule GuardianDb.TestSerializer do
   @behaviour Guardian.Serializer
-  def for_token(aud), do: { :ok, aud }
-  def from_token(aud), do: { :ok, aud }
+  def for_token(sub), do: { :ok, sub }
+  def from_token(sub), do: { :ok, sub }
 end
 
 alias GuardianDb.Test.Repo

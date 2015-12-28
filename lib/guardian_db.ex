@@ -24,6 +24,7 @@ defmodule GuardianDb do
     @primary_key {:jti, :string, autogenerate: false }
 
     schema "guardian_tokens" do
+      field :typ, :string
       field :aud, :string
       field :iss, :string
       field :sub, :string
@@ -39,7 +40,7 @@ defmodule GuardianDb do
     """
     def create!(claims, jwt) do
       prepared_claims = claims |> Dict.put("jwt", jwt) |> Dict.put("claims", claims)
-      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [], [:jti, :aud, :iss, :sub, :exp, :jwt, :claims])
+      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [], [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
     end
 
     @doc """
@@ -51,7 +52,7 @@ defmodule GuardianDb do
     end
   end
 
-  if !Dict.get(Application.get_env(:guardian_db, GuardianDb), :repo), do: raise "GuardianDb requires a repo"
+  if !Keyword.get(Application.get_env(:guardian_db, GuardianDb), :repo), do: raise "GuardianDb requires a repo"
 
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking

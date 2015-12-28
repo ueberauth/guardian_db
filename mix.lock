@@ -10,4 +10,4 @@
   "poison": {:hex, :poison, "1.5.0"},
   "poolboy": {:hex, :poolboy, "1.5.1"},
   "postgrex": {:hex, :postgrex, "0.9.1"},
-  "uuid": {:hex, :uuid, "1.1.1"}}
+  "uuid": {:hex, :uuid, "1.1.2"}}

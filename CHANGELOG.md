@@ -1,3 +1,17 @@
+# v 0.4.0
+
+* Update deps to use higher level of postgrex
+* Add the typ field
+
+When migrating form 0.3.0 to 0.4.0 you'll need to run a migration to add the typ
+field.
+
+```elixir
+alter table(:guardian_tokens) do
+  add :typ, :string
+end
+```
+
 # v 0.3.0
 
 Update the schema to use a map for claims.
