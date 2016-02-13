@@ -27,7 +27,7 @@ defmodule GuardianDb.Mixfile do
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~>0.9.0"},
+    [{:guardian, "~>0.10.0"},
      {:ecto, ">= 0.11.0"},
      {:postgrex, ">= 0.9.1", optional: true},
      {:ex_doc, "~> 0.8", only: :docs},
