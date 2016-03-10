@@ -53,6 +53,7 @@ To use GuardianDb you'll need to add a migration
           add :claims, :map
           timestamps
         end
+        create unique_index(:guardian_tokens, [:jti, :aud])
       end
 
       def down do
