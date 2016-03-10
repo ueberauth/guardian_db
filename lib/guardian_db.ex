@@ -69,7 +69,9 @@ defmodule GuardianDb do
   If the token is found, the verification continues, if not an error is returned.
   """
   def on_verify(claims, jwt) do
-    case repo.get_by(Token, jti: Dict.get(claims, "jti")) do
+    jti = Dict.get(claims, "jti")
+    aud = Dict.get(claims, "aud")
+    case repo.get_by(Token, jti: jti, aud: aud) do
       nil -> { :error, :token_not_found }
       _token -> { :ok, { claims, jwt } }
     end
