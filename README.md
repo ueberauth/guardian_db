@@ -71,6 +71,7 @@ Add this to your configuration:
 
     config :guardian_db, GuardianDb,
            repo: MyApp.Repo
+           schema_name: "tokens" # Optional, default is "guardian_tokens"
 ```
 
 It's a good idea to purge out any stale tokens that have already expired.

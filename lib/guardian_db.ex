@@ -22,8 +22,9 @@ defmodule GuardianDb do
 
     use Ecto.Model
     @primary_key {:jti, :string, autogenerate: false }
+    @schema_name Keyword.get(Application.get_env(:guardian_db, GuardianDb), :schema_name) || "guardian_tokens"
 
-    schema "guardian_tokens" do
+    schema @schema_name do
       field :typ, :string
       field :aud, :string
       field :iss, :string
