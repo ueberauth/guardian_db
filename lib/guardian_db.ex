@@ -36,6 +36,15 @@ defmodule GuardianDb do
     end
 
     @doc """
+    Find one token by matching jti and aud
+    """
+    def find_by_claims(claims) do
+      jti = Dict.get(claims, "jti")
+      aud = Dict.get(claims, "aud")
+      GuardianDb.repo.get_by(Token, jti: jti, aud: aud)
+    end
+
+    @doc """
     Create a new new token based on the JWT and decoded claims
     """
     def create!(claims, jwt) do
@@ -69,7 +78,7 @@ defmodule GuardianDb do
   If the token is found, the verification continues, if not an error is returned.
   """
   def on_verify(claims, jwt) do
-    case repo.get_by(Token, jti: Dict.get(claims, "jti")) do
+    case Token.find_by_claims(claims) do
       nil -> { :error, :token_not_found }
       _token -> { :ok, { claims, jwt } }
     end
@@ -79,8 +88,7 @@ defmodule GuardianDb do
   When logging out, or revoking a token, removes from the database so the token may no longer be used
   """
   def on_revoke(claims, jwt) do
-    jti = Dict.get(claims, "jti")
-    model = repo.get_by(Token, jti: jti)
+    model = Token.find_by_claims(claims)
     if model do
       case repo.delete(model) do
         { :error, _ } -> { :error, :could_not_revoke_token }
