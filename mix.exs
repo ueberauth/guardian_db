@@ -1,7 +1,7 @@
 defmodule GuardianDb.Mixfile do
   use Mix.Project
 
-  @version "0.4.0"
+  @version "0.5.0"
 
   def project do
     [app: :guardian_db,
@@ -27,7 +27,7 @@ defmodule GuardianDb.Mixfile do
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~> 0.10.1"},
+    [{:guardian, "~> 0.10"},
      {:ecto, ">= 0.11.0"},
      {:postgrex, ">= 0.9.1", optional: true},
      {:ex_doc, "~> 0.8", only: :docs},

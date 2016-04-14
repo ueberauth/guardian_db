@@ -1,3 +1,10 @@
+# v 0.5.0
+
+* Updated to support Guardian 0.10
+* Make Postgrex optional
+* Support database schema configuration
+* Improve scope token lookup
+
 # v 0.4.0
 
 * Update deps to use higher level of postgrex
