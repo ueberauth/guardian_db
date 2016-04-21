@@ -28,7 +28,7 @@ defmodule GuardianDb.Mixfile do
 
   defp deps do
     [{:guardian, "~> 0.10"},
-     {:ecto, ">= 0.11.0"},
+     {:ecto, "~> 2.0.0-rc"},
      {:postgrex, ">= 0.9.1", optional: true},
      {:ex_doc, "~> 0.8", only: :docs},
      {:earmark, ">= 0.0.0", only: :docs}]
