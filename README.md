@@ -70,7 +70,7 @@ Add this to your configuration:
            #…
 
     config :guardian_db, GuardianDb,
-           repo: MyApp.Repo
+           repo: MyApp.Repo,
            schema_name: "tokens" # Optional, default is "guardian_tokens"
 ```
 
