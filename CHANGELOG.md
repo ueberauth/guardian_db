@@ -2,7 +2,7 @@
 
 ### Breaking
 
-* Add support for ecto 2 rc.
+* Add support for ecto 2 rc
 
 # v 0.5.0
 
