@@ -1,3 +1,9 @@
+# v 0.6.0
+
+### Breaking
+
+* Add support for ecto 2 rc.
+
 # v 0.5.0
 
 * Updated to support Guardian 0.10
