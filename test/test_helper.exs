@@ -9,29 +9,21 @@ alias GuardianDb.Test.Repo
 defmodule GuardianDb.TestCase do
   use ExUnit.CaseTemplate
 
-  using(opts) do
+  using(_opts) do
     quote do
       import Ecto.Query
     end
   end
 
   setup do
-    Ecto.Adapters.SQL.begin_test_transaction(Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
 
-    ExUnit.Callbacks.on_exit(fn ->
-      Ecto.Adapters.SQL.rollback_test_transaction(Repo)
-    end)
+    Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
   end
 end
 
 ExUnit.start()
 
-_   = Ecto.Storage.down(Repo)
-:ok = Ecto.Storage.up(Repo)
-
 {:ok, _pid} = Repo.start_link
 
-Code.require_file "support/migrations.exs", __DIR__
-
-:ok = Ecto.Migrator.up(Repo, 0, GuardianDb.Test.Repo.Migrations, log: false)
-Process.flag(:trap_exit, true)
+Ecto.Adapters.SQL.Sandbox.mode(Repo, :manual)

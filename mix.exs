@@ -13,6 +13,7 @@ defmodule GuardianDb.Mixfile do
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      preferred_cli_env: [guardian_db: :test],
+     aliases: aliases,
      deps: deps]
   end
 
@@ -28,7 +29,7 @@ defmodule GuardianDb.Mixfile do
 
   defp deps do
     [{:guardian, "~> 0.10"},
-     {:ecto, ">= 0.11.0"},
+     {:ecto, "~> 2.0.0-rc"},
      {:postgrex, ">= 0.9.1", optional: true},
      {:ex_doc, "~> 0.8", only: :docs},
      {:earmark, ">= 0.0.0", only: :docs}]
@@ -41,5 +42,9 @@ defmodule GuardianDb.Mixfile do
       links: %{github: "https://github.com/hassox/guardian_db"},
       files: ~w(lib) ++ ~w(CHANGELOG.md LICENSE mix.exs README.md)
     ]
+  end
+
+  defp aliases do
+    ["test": ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 end
