@@ -4,10 +4,10 @@ defmodule GuardianDb.ExpiredSweeper do
 
   ## Example
 
-      worker(GuardianDb.ExpiredSweeper, [interval: 60])
+      worker(GuardianDb.ExpiredSweeper, [interval: 6000])
   """
   use GenServer
-  @default_interval 60 * 60 * 60 # 1 hour
+  @default_interval 60 * 60 * 60 * 1000 # 1 hour
 
   def start_link(state, opts \\ []) do
     state = state
@@ -59,10 +59,10 @@ defmodule GuardianDb.ExpiredSweeper do
 
   defp reset_state_timer!(state) do
     if state[:timer] do
-      :timer.cancel(state.timer)
+      Process.cancel_timer(state.timer)
     end
 
     timer = Process.send_after(self, :sweep, state.interval)
-    %{state | timer: timer}
+    Map.merge(state, %{timer: timer})
   end
 end
