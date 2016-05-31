@@ -7,7 +7,7 @@ defmodule GuardianDb.Mixfile do
     [app: :guardian_db,
      version: @version,
      description: "DB tracking for token validity",
-     elixir: "~> 1.1",
+     elixir: "~> 1.2",
      elixirc_paths: _elixirc_paths(Mix.env),
      package: package,
      build_embedded: Mix.env == :prod,
