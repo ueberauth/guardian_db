@@ -3,16 +3,18 @@ defmodule GuardianDb.ExpiredSweeper do
   Periocially purges expired tokens from the DB.
 
   ## Example
+    config :guardian_db, GuardianDb,
+      sweep_interval: 60 # 1 hour
 
-      worker(GuardianDb.ExpiredSweeper, [interval: 6000])
+    # in your supervisor
+      worker(GuardianDb.ExpiredSweeper, [])
   """
   use GenServer
-  @default_interval 60 * 60 * 60 * 1000 # 1 hour
+
+  def start_link, do: start_link([])
 
   def start_link(state, opts \\ []) do
-    state = state
-    |> Enum.into(%{})
-    |> Map.put_new(:interval, @default_interval)
+    state = Enum.into(state, %{})
 
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
@@ -33,6 +35,7 @@ defmodule GuardianDb.ExpiredSweeper do
   end
 
   def init(state) do
+    IO.puts("INITING THE SWEEPER #{interval}")
     {:ok, reset_state_timer!(state)}
   end
 
@@ -62,7 +65,17 @@ defmodule GuardianDb.ExpiredSweeper do
       Process.cancel_timer(state.timer)
     end
 
-    timer = Process.send_after(self, :sweep, state.interval)
+    timer = Process.send_after(self, :sweep, interval)
     Map.merge(state, %{timer: timer})
+  end
+
+  defp interval do
+    value = :guardian_db
+    |> Application.get_env(GuardianDb)
+    |> Keyword.get(:sweep_interval, 60)
+    value = value * 60 * 1000
+    value = round(value)
+
+    if value <= 1000, do: 1000, else: value
   end
 end

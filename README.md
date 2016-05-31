@@ -83,7 +83,17 @@ It's a good idea to purge out any stale tokens that have already expired.
 You can setup automatic purging by adding the `GuardianDb.ExpiredSweeper` as a worker to your supervision tree.
 
 ```elixir
-  worker(GuardianDb.ExpiredSweeper, [[interval: 1000 * 60 * 60]]) # run every hour
+  worker(GuardianDb.ExpiredSweeper, [])
+```
+
+To configure your sweeper add a `sweep_interval` in minutes to your
+`guardian_db` config.
+
+
+```elixir
+    config :guardian_db, GuardianDb,
+           repo: MyApp.Repo,
+           sweep_interval: 120 # 120 minutes
 ```
 
 By default GuardianDb will not purge your expired tokens.
