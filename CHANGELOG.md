@@ -1,3 +1,10 @@
+# Master (unpublished)
+
+# v0.7.0
+
+* Add a schema prefix
+* Add an expired token sweeper process
+
 # v 0.6.0
 
 ### Breaking
