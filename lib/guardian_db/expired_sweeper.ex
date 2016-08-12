@@ -13,7 +13,7 @@ defmodule GuardianDb.ExpiredSweeper do
 
   def start_link, do: start_link([])
 
-  def start_link(state, opts \\ []) do
+  def start_link(state, _opts \\ []) do
     state = Enum.into(state, %{})
 
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
