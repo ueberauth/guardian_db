@@ -46,6 +46,7 @@ To use GuardianDb you'll need to add a migration
         create table(:guardian_tokens, primary_key: false) do
           add :jti, :string, primary_key: true
           add :aud, :string, primary_key: true
+          add :typ, :string
           add :iss, :string
           add :sub, :string
           add :exp, :bigint
