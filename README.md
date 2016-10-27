@@ -41,11 +41,11 @@ To use GuardianDb you'll need to add a migration
     defmodule MyApp.Repo.Migrations.GuardianDb do
       use Ecto.Migration
 
-      def up do
+      def change do
+
         create table(:guardian_tokens, primary_key: false) do
           add :jti, :string, primary_key: true
-          add :typ, :string
-          add :aud, :string
+          add :aud, :string, primary_key: true
           add :iss, :string
           add :sub, :string
           add :exp, :bigint
@@ -53,12 +53,9 @@ To use GuardianDb you'll need to add a migration
           add :claims, :map
           timestamps
         end
-        create unique_index(:guardian_tokens, [:jti, :aud])
-      end
 
-      def down do
-        drop table(:guardian_tokens)
       end
+      
     end
 ```
 
