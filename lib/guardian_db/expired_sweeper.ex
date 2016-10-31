@@ -35,7 +35,6 @@ defmodule GuardianDb.ExpiredSweeper do
   end
 
   def init(state) do
-    IO.puts("INITING THE SWEEPER #{interval}")
     {:ok, reset_state_timer!(state)}
   end
 
