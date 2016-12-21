@@ -54,7 +54,7 @@ defmodule GuardianDb do
     """
     def create!(claims, jwt) do
       prepared_claims = claims |> Dict.put("jwt", jwt) |> Dict.put("claims", claims)
-      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [], [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
+      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
     end
 
     @doc """
