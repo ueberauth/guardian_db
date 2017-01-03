@@ -53,8 +53,14 @@ defmodule GuardianDb do
     Create a new new token based on the JWT and decoded claims
     """
     def create!(claims, jwt) do
-      prepared_claims = claims |> Dict.put("jwt", jwt) |> Dict.put("claims", claims)
-      GuardianDb.repo.insert cast(%Token{}, prepared_claims, [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
+      prepared_claims =
+        claims
+        |> Dict.put("jwt", jwt)
+        |> Dict.put("claims", claims)
+
+      %Token{}
+      |> cast(prepared_claims, [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
+      |> GuardianDb.repo.insert()
     end
 
     @doc """
@@ -71,10 +77,10 @@ defmodule GuardianDb do
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking
   """
-  def after_encode_and_sign(resource, type, claims, jwt) do
+  def after_encode_and_sign(_resource, _type, claims, jwt) do
     case Token.create!(claims, jwt) do
-      { :error, _ } -> { :error, :token_storage_failure }
-      _ -> { :ok, { resource, type, claims, jwt } }
+      {:error, _} -> {:error, :token_storage_failure}
+      _           -> :ok
     end
   end
 
