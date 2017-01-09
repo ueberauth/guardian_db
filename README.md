@@ -56,7 +56,7 @@ To use GuardianDb you'll need to add a migration
         end
 
       end
-      
+
     end
 ```
 
@@ -95,5 +95,3 @@ To configure your sweeper add a `sweep_interval` in minutes to your
 ```
 
 By default GuardianDb will not purge your expired tokens.
-
-

@@ -37,15 +37,15 @@ defmodule GuardianDb do
       field :jwt, :string
       field :claims, :map
 
-      timestamps
+      timestamps()
     end
 
     @doc """
     Find one token by matching jti and aud
     """
     def find_by_claims(claims) do
-      jti = Dict.get(claims, "jti")
-      aud = Dict.get(claims, "aud")
+      jti = Map.get(claims, "jti")
+      aud = Map.get(claims, "aud")
       GuardianDb.repo.get_by(Token, jti: jti, aud: aud)
     end
 
@@ -55,8 +55,8 @@ defmodule GuardianDb do
     def create!(claims, jwt) do
       prepared_claims =
         claims
-        |> Dict.put("jwt", jwt)
-        |> Dict.put("claims", claims)
+        |> Map.put("jwt", jwt)
+        |> Map.put("claims", claims)
 
       %Token{}
       |> cast(prepared_claims, [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
@@ -67,8 +67,8 @@ defmodule GuardianDb do
     Purge any tokens that are expired. This should be done periodically to keep your DB table clean of clutter
     """
     def purge_expired_tokens! do
-      timestamp = Guardian.Utils.timestamp
-      from(t in Token, where: t.exp < ^timestamp) |> GuardianDb.repo.delete_all
+      timestamp = Guardian.Utils.timestamp()
+      from(t in Token, where: t.exp < ^timestamp) |> GuardianDb.repo.delete_all()
     end
   end
 
@@ -101,7 +101,7 @@ defmodule GuardianDb do
   def on_revoke(claims, jwt) do
     model = Token.find_by_claims(claims)
     if model do
-      case repo.delete(model) do
+      case repo().delete(model) do
         {:error, _} -> {:error, :could_not_revoke_token}
         nil -> {:error, :could_not_revoke_token}
         _   -> {:ok, {claims, jwt}}
@@ -112,6 +112,6 @@ defmodule GuardianDb do
   end
 
   def repo do
-    Dict.get(Application.get_env(:guardian_db, GuardianDb), :repo)
+    Keyword.get(Application.get_env(:guardian_db, GuardianDb), :repo)
   end
 end

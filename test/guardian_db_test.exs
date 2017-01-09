@@ -10,7 +10,7 @@ defmodule GuardianDbTest do
           "aud" => "token",
           "sub" => "the_subject",
           "iss" => "the_issuer",
-          "exp" => Guardian.Utils.timestamp + 1_000_000_000,
+          "exp" => Guardian.Utils.timestamp() + 1_000_000_000,
         }
       }
     }
@@ -66,8 +66,8 @@ defmodule GuardianDbTest do
   end
 
   test "purge stale tokens" do
-    Token.create! %{ "jti" => "token1", "exp" => Guardian.Utils.timestamp + 5000 }, "Token 1"
-    Token.create! %{ "jti" => "token2", "exp" => Guardian.Utils.timestamp - 5000 }, "Token 2"
+    Token.create! %{ "jti" => "token1", "exp" => Guardian.Utils.timestamp() + 5000 }, "Token 1"
+    Token.create! %{ "jti" => "token2", "exp" => Guardian.Utils.timestamp() - 5000 }, "Token 2"
 
     Token.purge_expired_tokens!
 
