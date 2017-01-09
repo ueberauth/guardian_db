@@ -17,3 +17,4 @@ config :guardian_db, GuardianDb.Test.Repo,
   database: "guardian_db_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   priv: "test/support"
+  priv: "priv/test"
