@@ -69,23 +69,33 @@ defmodule GuardianDb do
   if !Keyword.get(Application.get_env(:guardian_db, GuardianDb), :repo), do: raise "GuardianDb requires a repo"
 
   @doc """
-  After the JWT is generated, stores the various fields of it in the DB for tracking
+  After the JWT is generated, stores the various fields of it in the DB for tracking,
+  assuming it matches the configured token type for storage
   """
+
   def after_encode_and_sign(resource, type, claims, jwt) do
-    case Token.create!(claims, jwt) do
-      { :error, _ } -> { :error, :token_storage_failure }
-      _ -> { :ok, { resource, type, claims, jwt } }
+    if configured_type_matches(type) do
+      case Token.create!(claims, jwt) do
+        { :error, _ } -> { :error, :token_storage_failure }
+        _ -> { :ok, { resource, type, claims, jwt } }
+      end
+    else
+      { :ok, { resource, type, claims, jwt } }
     end
   end
 
   @doc """
-  When a token is verified, check to make sure that it is present in the DB.
+  When a token is verified, check to make sure that it is present in the DB if it matches the configured token type
   If the token is found, the verification continues, if not an error is returned.
   """
   def on_verify(claims, jwt) do
-    case Token.find_by_claims(claims) do
-      nil -> { :error, :token_not_found }
-      _token -> { :ok, { claims, jwt } }
+    if configured_type_matches(claims["typ"]) do
+      case Token.find_by_claims(claims) do
+        nil -> { :error, :token_not_found }
+        _token -> { :ok, { claims, jwt } }
+      end
+    else
+      { :ok, {claims, jwt } }
     end
   end
 
@@ -103,6 +113,11 @@ defmodule GuardianDb do
     else
       { :ok, { claims, jwt } }
     end
+  end
+
+  def configured_type_matches(type) do
+    env_token_type = Keyword.get(Application.get_env(:guardian_db, GuardianDb), :token_type)
+    !(env_token_type && to_string(env_token_type) !== to_string(type))
   end
 
   def repo do
