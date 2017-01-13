@@ -77,10 +77,10 @@ defmodule GuardianDb do
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking
   """
-  def after_encode_and_sign(_resource, _type, claims, jwt) do
+  def after_encode_and_sign(resource, type, claims, jwt) do
     case Token.create!(claims, jwt) do
-      {:error, _} -> {:error, :token_storage_failure}
-      _           -> :ok
+      { :error, _ } -> { :error, :token_storage_failure }
+      _           -> { :ok, { resource, type, claims, jwt } }
     end
   end
 
