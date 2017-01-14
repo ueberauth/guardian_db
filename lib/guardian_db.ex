@@ -79,8 +79,8 @@ defmodule GuardianDb do
   """
   def after_encode_and_sign(resource, type, claims, jwt) do
     case Token.create!(claims, jwt) do
-      { :error, _ } -> { :error, :token_storage_failure }
-      _           -> { :ok, { resource, type, claims, jwt } }
+      {:error, _} -> {:error, :token_storage_failure}
+      _           -> {:ok, {resource, type, claims, jwt}}
     end
   end
 
@@ -90,8 +90,8 @@ defmodule GuardianDb do
   """
   def on_verify(claims, jwt) do
     case Token.find_by_claims(claims) do
-      nil -> { :error, :token_not_found }
-      _token -> { :ok, { claims, jwt } }
+      nil    -> {:error, :token_not_found}
+      _token -> {:ok, {claims, jwt}}
     end
   end
 
@@ -102,12 +102,12 @@ defmodule GuardianDb do
     model = Token.find_by_claims(claims)
     if model do
       case repo.delete(model) do
-        { :error, _ } -> { :error, :could_not_revoke_token }
-        nil -> { :error, :could_not_revoke_token }
-        _ -> { :ok, { claims, jwt } }
-        end
+        {:error, _} -> {:error, :could_not_revoke_token}
+        nil -> {:error, :could_not_revoke_token}
+        _   -> {:ok, {claims, jwt}}
+      end
     else
-      { :ok, { claims, jwt } }
+      {:ok, {claims, jwt}}
     end
   end
 
