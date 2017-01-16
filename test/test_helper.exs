@@ -1,7 +1,7 @@
 defmodule GuardianDb.TestSerializer do
   @behaviour Guardian.Serializer
-  def for_token(sub), do: { :ok, sub }
-  def from_token(sub), do: { :ok, sub }
+  def for_token(sub), do: {:ok, sub}
+  def from_token(sub), do: {:ok, sub}
 end
 
 alias GuardianDb.Test.Repo
@@ -17,7 +17,6 @@ defmodule GuardianDb.TestCase do
 
   setup do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
-
     Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
   end
 end
