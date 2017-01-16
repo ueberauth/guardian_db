@@ -9,12 +9,12 @@ defmodule GuardianDb.Mixfile do
      description: "DB tracking for token validity",
      elixir: "~> 1.2",
      elixirc_paths: _elixirc_paths(Mix.env),
-     package: package,
+     package: package(),
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      preferred_cli_env: [guardian_db: :test],
-     aliases: aliases,
-     deps: deps]
+     aliases: aliases(),
+     deps: deps()]
   end
 
   def application do

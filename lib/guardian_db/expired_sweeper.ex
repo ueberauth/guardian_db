@@ -64,7 +64,7 @@ defmodule GuardianDb.ExpiredSweeper do
       Process.cancel_timer(state.timer)
     end
 
-    timer = Process.send_after(self, :sweep, interval)
+    timer = Process.send_after(self(), :sweep, interval())
     Map.merge(state, %{timer: timer})
   end
 

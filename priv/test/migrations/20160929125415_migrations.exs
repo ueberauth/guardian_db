@@ -12,7 +12,7 @@ defmodule GuardianDb.Test.Repo.Migrations do
       add :jwt, :text
       add :claims, :map
 
-      timestamps
+      timestamps()
     end
   end
 
