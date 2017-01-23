@@ -11,15 +11,15 @@ with an error response.
 
 ```elixir
     case Guardian.encode_and_sign(resource, type, claims) do
-      { :ok, jwt, full_claims } -> # cool
-      { :error, :token_storage_failure } -> # this comes from GuardianDb
-      { :error, reason } -> # handle failure
+      {:ok, jwt, full_claims} -> # cool
+      {:error, :token_storage_failure} -> # this comes from GuardianDb
+      {:error, reason} -> # handle failure
     end
 
     case Guardian.decode_and_verify(jwt) do
-      { :ok, claims } -> # stuff with the claims
-      { :error, :token_not_found } -> # This comes from GuardianDb
-      { :error, reason } -> # something else stopped us from verifying
+      {:ok, claims} -> # stuff with the claims
+      {:error, :token_not_found} -> # This comes from GuardianDb
+      {:error, reason} -> # something else stopped us from verifying
     end
 ```
 
@@ -30,8 +30,8 @@ you're using an API.
 ```elixir
     case Guardian.revoke! jwt, claims do
       :ok -> # Great
-      { :error, :could_not_revoke_token } -> # Oh no GuardianDb
-      { :error, reason } -> # Oh no
+      {:error, :could_not_revoke_token} -> # Oh no GuardianDb
+      {:error, reason} -> # Oh no
     end
 ```
 

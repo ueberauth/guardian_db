@@ -1,7 +1,7 @@
 defmodule GuardianDb.Mixfile do
   use Mix.Project
 
-  @version "0.7.0"
+  @version "0.8.0"
 
   def project do
     [app: :guardian_db,
@@ -31,8 +31,8 @@ defmodule GuardianDb.Mixfile do
     [{:guardian, "~> 0.14"},
      {:ecto, "~> 2.1"},
      {:postgrex, ">= 0.11.1", optional: true},
-     {:ex_doc, "~> 0.8", only: :docs},
-     {:earmark, ">= 0.0.0", only: :docs}]
+     {:ex_doc, "~> 0.8", only: :dev},
+     {:earmark, ">= 0.0.0", only: :dev}]
   end
 
   defp package do
