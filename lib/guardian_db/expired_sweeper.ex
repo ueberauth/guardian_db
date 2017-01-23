@@ -69,12 +69,13 @@ defmodule GuardianDb.ExpiredSweeper do
   end
 
   defp interval do
-    value = :guardian_db
-    |> Application.get_env(GuardianDb)
-    |> Keyword.get(:sweep_interval, 60)
-    value = value * 60 * 1000
-    value = round(value)
-
-    if value <= 1000, do: 1000, else: value
+    value =
+      :guardian_db
+      |> Application.get_env(GuardianDb)
+      |> Keyword.get(:sweep_interval, 60)
+      |> minute_to_ms
   end
+
+  defp minute_to_ms(value) when value < 1, do: 1000
+  defp minute_to_ms(value), do: round(value * 60 * 1000)
 end
