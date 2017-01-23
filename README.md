@@ -84,6 +84,14 @@ You can setup automatic purging by adding the `GuardianDb.ExpiredSweeper` as a w
   worker(GuardianDb.ExpiredSweeper, [])
 ```
 
+If you are working with a production release using Distillery, you need to ensure both `guardian_db` and `distillery` are added to your applications list.
+
+```elixir
+  def application do
+    [applications: :distillery, :guardian_db]
+  end
+```
+
 To configure your sweeper add a `sweep_interval` in minutes to your
 `guardian_db` config.
 
