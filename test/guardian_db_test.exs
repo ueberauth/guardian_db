@@ -1,5 +1,6 @@
 defmodule GuardianDbTest do
   use GuardianDb.TestCase
+
   alias GuardianDb.Token
   alias GuardianDb.Test.Repo
 
@@ -10,7 +11,7 @@ defmodule GuardianDbTest do
           "aud" => "token",
           "sub" => "the_subject",
           "iss" => "the_issuer",
-          "exp" => Guardian.Utils.timestamp + 1_000_000_000,
+          "exp" => Guardian.Utils.timestamp() + 1_000_000_000,
         }
       }
     }
@@ -38,19 +39,19 @@ defmodule GuardianDbTest do
     token = Repo.get(Token, "token-uuid")
     assert token != nil
 
-    assert { :ok, { context.claims, "The JWT" } } == GuardianDb.on_verify(context.claims, "The JWT")
+    assert {:ok, {context.claims, "The JWT"}} == GuardianDb.on_verify(context.claims, "The JWT")
   end
 
   test "on_verify without a record in the db", context do
     token = Repo.get(Token, "token-uuid")
     assert token == nil
-    assert { :error, :token_not_found } == GuardianDb.on_verify(context.claims, "The JWT")
+    assert {:error, :token_not_found} == GuardianDb.on_verify(context.claims, "The JWT")
   end
 
   test "on_revoke without a record in the db", context do
     token = Repo.get(Token, "token-uuid")
     assert token == nil
-    assert GuardianDb.on_revoke(context.claims, "The JWT") == { :ok, { context.claims, "The JWT" } }
+    assert GuardianDb.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
   end
 
   test "on_revoke with a record in the db", context do
@@ -59,15 +60,15 @@ defmodule GuardianDbTest do
     token = Repo.get(Token, "token-uuid")
     assert token != nil
 
-    assert GuardianDb.on_revoke(context.claims, "The JWT") == { :ok, { context.claims, "The JWT" } }
+    assert GuardianDb.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
 
     token = Repo.get(Token, "token-uuid")
     assert token == nil
   end
 
   test "purge stale tokens" do
-    Token.create! %{ "jti" => "token1", "exp" => Guardian.Utils.timestamp + 5000 }, "Token 1"
-    Token.create! %{ "jti" => "token2", "exp" => Guardian.Utils.timestamp - 5000 }, "Token 2"
+    Token.create! %{"jti" => "token1", "exp" => Guardian.Utils.timestamp + 5000}, "Token 1"
+    Token.create! %{"jti" => "token2", "exp" => Guardian.Utils.timestamp - 5000}, "Token 2"
 
     Token.purge_expired_tokens!
 

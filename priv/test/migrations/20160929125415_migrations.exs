@@ -2,7 +2,7 @@ defmodule GuardianDb.Test.Repo.Migrations do
   use Ecto.Migration
 
   def up do
-    create table(:guardian_tokens, primary_key: false) do
+    create_if_not_exists table(:guardian_tokens, primary_key: false) do
       add :jti, :string, primary_key: true
       add :typ, :string
       add :aud, :string
@@ -12,7 +12,7 @@ defmodule GuardianDb.Test.Repo.Migrations do
       add :jwt, :text
       add :claims, :map
 
-      timestamps
+      timestamps()
     end
   end
 

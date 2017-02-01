@@ -1,4 +1,9 @@
-# Master (unpublished)
+# v0.8.0
+
+* Sweeper configuration now works in minutes
+* Update dependencies
+* Fix 1.4 warnings
+* Raise error when configuration is missing
 
 # v0.7.0
 
