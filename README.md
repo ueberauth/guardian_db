@@ -52,7 +52,7 @@ To use GuardianDb you'll need to add a migration
           add :exp, :bigint
           add :jwt, :text
           add :claims, :map
-          timestamps
+          timestamps()
         end
 
       end
