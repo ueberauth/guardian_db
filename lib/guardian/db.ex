@@ -115,23 +115,42 @@ defmodule Guardian.DB do
   if is_nil(@repo), do: raise("Guardian.DB requires a repo")
 
   @doc """
-  After the JWT is generated, stores the various fields of it in the DB for tracking
+  After the JWT is generated, stores the various fields of it in the DB for tracking if
+  token type matches the configured types to be stored.
   """
   def after_encode_and_sign(resource, type, claims, jwt) do
-    case Token.create(claims, jwt) do
+    case store_token(type, claims, jwt) do
       {:error, _} -> {:error, :token_storage_failure}
-      _ -> {:ok, {resource, type, claims, jwt}}
+      _           -> {:ok, {resource, type, claims, jwt}}
     end
   end
 
+  defp store_token(type, claims, jwt) do
+    if storable_type?(type) do
+      Token.create(claims, jwt)
+    else
+      :non_storable_type # skip token creation for this type
+    end
+  end
+
+
   @doc """
-  When a token is verified, check to make sure that it is present in the DB.
+  When a token is verified, check to make sure that it is present in the DB if it 
+  matches the configured token storage types.
   If the token is found, the verification continues, if not an error is returned.
   """
   def on_verify(claims, jwt) do
-    case Token.find_by_claims(claims) do
+    case find_token(claims) do
       nil -> {:error, :token_not_found}
-      _token -> {:ok, {claims, jwt}}
+      _   -> {:ok, {claims, jwt}}
+    end
+  end
+
+  defp find_token(%{"typ" => type} = claims) do
+    if storable_type?(type) do
+      Token.find_by_claims(claims)
+    else
+      :ok # ingore verify for this type
     end
   end
 
@@ -159,4 +178,15 @@ defmodule Guardian.DB do
     |> Application.fetch_env!(Guardian.DB)
     |> Keyword.fetch!(:repo)
   end
+
+  defp token_types() do
+    :guardian
+    |> Application.fetch_env!(Guardian.DB)
+    |> Keyword.get(:token_types, [])
+  end
+
+  defp storable_type?(type), do: storable_type?(type, token_types())
+
+  defp storable_type?(_, []), do: true  # store all types by default
+  defp storable_type?(type, types), do: type in types
 end

@@ -6,6 +6,7 @@ defmodule Guardian.DB.Test do
     {:ok, %{
       claims: %{
         "jti" => "token-uuid",
+        "typ" => "token",
         "aud" => "token",
         "sub" => "the_subject",
         "iss" => "the_issuer",
