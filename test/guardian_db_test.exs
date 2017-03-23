@@ -7,6 +7,7 @@ defmodule GuardianDbTest do
   setup do
     { :ok, %{
         claims: %{
+          "typ" => "token",
           "jti" => "token-uuid",
           "aud" => "token",
           "sub" => "the_subject",
@@ -26,6 +27,7 @@ defmodule GuardianDbTest do
     token = Repo.get(Token, "token-uuid")
 
     assert token != nil
+    assert token.typ == "token"
     assert token.jti == "token-uuid"
     assert token.aud == "token"
     assert token.sub == "the_subject"

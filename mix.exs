@@ -7,7 +7,7 @@ defmodule GuardianDb.Mixfile do
     [app: :guardian_db,
      version: @version,
      description: "DB tracking for token validity",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3",
      elixirc_paths: _elixirc_paths(Mix.env),
      package: package(),
      build_embedded: Mix.env == :prod,
@@ -22,9 +22,11 @@ defmodule GuardianDb.Mixfile do
   end
 
   defp _applications(:test), do: [:postgrex, :ecto, :logger]
+  defp _applications(:test_config), do: _applications(:test)
   defp _applications(_), do: [:logger]
 
   defp _elixirc_paths(:test), do: ["lib", "test/support"]
+  defp _elixirc_paths(:test_config), do: _elixirc_paths(:test)
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
@@ -45,6 +47,15 @@ defmodule GuardianDb.Mixfile do
   end
 
   defp aliases do
-    ["test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+    ["test": ["ecto.create --quiet", "ecto.migrate", "test"],
+     "test.all": [&run_tests/1, &run_config_tests/1]]
+  end
+
+  defp run_tests(_) do
+    Mix.shell.cmd("MIX_ENV=test mix test --color")
+  end
+
+  defp run_config_tests(_) do
+    Mix.shell.cmd("MIX_ENV=test_config mix test test/guardian_db/config_test.exs --include config_test --color")
   end
 end

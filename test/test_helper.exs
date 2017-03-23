@@ -9,6 +9,8 @@ alias GuardianDb.Test.Repo
 defmodule GuardianDb.TestCase do
   use ExUnit.CaseTemplate
 
+  ExUnit.configure(exclude: :config_test)
+
   using(_opts) do
     quote do
       import Ecto.Query
