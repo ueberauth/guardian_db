@@ -48,7 +48,7 @@ You will then need to add a migration:
     end
 ```
 
-**Do not run the migration yet.** You also need to this to your configuration:
+**Do not run the migration yet.** You also need to add this to your configuration:
 
 ```elixir
     config :guardian, Guardian,
