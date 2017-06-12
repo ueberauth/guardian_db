@@ -2,7 +2,7 @@ GuardianDb
 ==========
 
 GuardianDB is an extension to vanilla Guardian that tracks tokens in your
-application to prevent playback.
+applications database to prevent playback.
 
 Installation
 ==========
@@ -30,7 +30,6 @@ You will then need to add a migration:
       use Ecto.Migration
 
       def change do
-
         create table(:guardian_tokens, primary_key: false) do
           add :jti, :string, primary_key: true
           add :aud, :string, primary_key: true
@@ -42,100 +41,83 @@ You will then need to add a migration:
           add :claims, :map
           timestamps()
         end
-
       end
-
     end
 ```
 
-**Do not run the migration yet.** You also need to add this to your configuration:
+**Do not run the migration yet.** You also need to finish your setup first.
+
+# Configuration
 
 ```elixir
-    config :guardian, Guardian,
-           hooks: GuardianDb,
-           #…
-
-    config :guardian_db, GuardianDb,
-           repo: MyApp.Repo,
-           schema_name: "guardian_tokens"
+  config :guardian_db, GuardianDb,
+         repo: MyApp.Repo,
+         schema_name: "guardian_tokens", # default
+         sweep_interval: 60 # minutes. 60 default
 ```
 
-If you created the token table under a different name in your migration, you will need to specify that in the `schema_name` option above. For example, if your token table is named `auth_tokens` then the `schema_name` in your GuardianDb config also needs to say `auth_tokens`.
-
-Now run the migration and you'll be good to go.
-
-Usage
-==========
-
-All tokens are stored in the database when initially generated.
-After that, each time they are verified, the token is looked up. If present, the
-verification continues but if it is not found, the verification is abandoned
-with an error response.
-
-```elixir
-    case Guardian.encode_and_sign(resource, type, claims) do
-      {:ok, jwt, full_claims} -> # cool
-      {:error, :token_storage_failure} -> # this comes from GuardianDb
-      {:error, reason} -> # handle failure
-    end
-
-    case Guardian.decode_and_verify(jwt) do
-      {:ok, claims} -> # stuff with the claims
-      {:error, :token_not_found} -> # This comes from GuardianDb
-      {:error, reason} -> # something else stopped us from verifying
-    end
-```
-
-When you want to revoke a token, call Guardian.revoke!. This is called
-automatically by Guardian when using the sign\_out function. But for times when
-you're using an API.
-
-```elixir
-    case Guardian.revoke! jwt, claims do
-      :ok -> # Great
-      {:error, :could_not_revoke_token} -> # Oh no GuardianDb
-      {:error, reason} -> # Oh no
-    end
-```
-
-It's a good idea to purge out any stale tokens that have already expired.
-
-```elixir
-    GuardianDb.Token.purge_expired_tokens!
-```
-
-You can setup automatic purging by adding the `GuardianDb.ExpiredSweeper` as a worker to your supervision tree.
+To sweep expired tokens from your db you should add `GuardianDb` to your supervision tree.
 
 ```elixir
   worker(GuardianDb.ExpiredSweeper, [])
 ```
 
-If you are working with a production release using Distillery, you need to ensure both `guardian_db` and `distillery` are added to your applications list.
+## Guardian >= 1.0
+
+GuardianDb works by hooking into the lifecycle of your token module.
+
+You'll need to add it to
+
+* `after_encode_and_sign`
+* `on_verify`
+* `on_revoke`
+
+For example:
 
 ```elixir
-  def application do
-    [applications: :distillery, :guardian_db]
+defmodule MyApp.AuthTokens do
+  use Guardain, otp_app: :my_app
+
+  # snip...
+
+  def after_encode_and_sign(resource, claims, token, _options) do
+    with {:ok, _} <- GuardianDb.after_encode_and_sign(resource, claims["typ"], claims, token) do
+      {:ok, token}
+    end
   end
+
+  def on_verify(claims, token, _options) do
+    with {:ok, _} <- GuardianDb.on_verify(claims, token) do
+      {:ok, claims}
+    end
+  end
+
+  def on_revoke(claims, token, _options) do
+    with {:ok, _} <- GuardianDb.on_revoke(claims, token) do
+      {:ok, claims}
+    end
+  end
+end
 ```
 
-To configure your sweeper add a `sweep_interval` in minutes to your
-`guardian_db` config.
+## Guardian < 1.0
 
+To use `GuardianDb` with Guardian less than version 1.0, add GuardianDb as your
+hooks module. In the Guardian configuration:
 
 ```elixir
-    config :guardian_db, GuardianDb,
-           repo: MyApp.Repo,
-           sweep_interval: 120 # 120 minutes
+config :guardian, Guardian,
+       hooks: GuardianDb
 ```
 
-By default GuardianDb will not purge your expired tokens.
+Now run the migration and you'll be good to go.
 
 Considerations
 ==========
 
 Vanilla Guardian is already a very robust JWT solution. However, if your application needs the ability to immediately revoke and invalidate tokens that have already been generated, you need something like GuardianDb to build upon Guardian.
 
-In vanilla Guardian, you as a systems administrator have no way of revoking tokens that have already been generated. You can call `Guardian.revoke!`, but in vanilla Guardian that function does not actually do anything - it just provides hooks for other libraries, such as this one, to define more specific behavior. Discarding the token away after something like a log out action is left up to the client application. If the client application does not discard the token, or does not log out, or the token gets stolen by a malicious script (because the client application stores it in localStorage, for instance), the only thing you can do is wait until the token expires. Depending on the scenario, this may not be acceptable.
+In vanilla Guardian, you as a systems administrator have no way of revoking tokens that have already been generated. You can call `Guardian.revoke!`, but in vanilla Guardian that function does not actually do anything - it just provides hooks for other libraries, such as this one, to define more specific behavior. Discarding the token after something like a log out action is left up to the client application. If the client application does not discard the token, or does not log out, or the token gets stolen by a malicious script (because the client application stores it in localStorage, for instance), the only thing you can do is wait until the token expires. Depending on the scenario, this may not be acceptable.
 
 With GuardianDb, records of all generated tokens are kept in your application's database. During each request, the `Guardian.Plug.VerifyHeader` and `Guardian.Plug.VerifySession` plugs check the database to make sure the token is there. If it is not, the server returns a 401 Unauthorized response to the client. Furthermore, `Guardian.revoke!` behavior becomes enhanced, as it actually removes the token from the database. This means that if the user logs out, or you revoke their token (e.g. after noticing suspicious activity on the account), they will need to re-authenticate.
 

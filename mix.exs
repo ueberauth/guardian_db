@@ -7,7 +7,7 @@ defmodule GuardianDb.Mixfile do
     [app: :guardian_db,
      version: @version,
      description: "DB tracking for token validity",
-     elixir: "~> 1.2",
+     elixir: "~> 1.3 or ~> 1.4",
      elixirc_paths: _elixirc_paths(Mix.env),
      package: package(),
      build_embedded: Mix.env == :prod,
@@ -28,10 +28,10 @@ defmodule GuardianDb.Mixfile do
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~> 0.14"},
+    [{:guardian, "~> 0.14 or >= 1.0"},
      {:ecto, "~> 2.1"},
      {:postgrex, ">= 0.11.1", optional: true},
-     {:ex_doc, "~> 0.8", only: :dev},
+     {:ex_doc, ">= 0.16", only: :dev},
      {:earmark, ">= 0.0.0", only: :dev}]
   end
 
