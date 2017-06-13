@@ -2,7 +2,7 @@ GuardianDb
 ==========
 
 GuardianDB is an extension to vanilla Guardian that tracks tokens in your
-applications database to prevent playback.
+application's database to prevent playback.
 
 Installation
 ==========
@@ -45,7 +45,7 @@ You will then need to add a migration:
     end
 ```
 
-**Do not run the migration yet.** You also need to finish your setup first.
+**Do not run the migration yet,** we need to complete our setup first.
 
 # Configuration
 
@@ -53,10 +53,10 @@ You will then need to add a migration:
   config :guardian_db, GuardianDb,
          repo: MyApp.Repo,
          schema_name: "guardian_tokens", # default
-         sweep_interval: 60 # minutes. 60 default
+         sweep_interval: 60 # default: 60 minutes
 ```
 
-To sweep expired tokens from your db you should add `GuardianDb` to your supervision tree.
+To sweep expired tokens from your db you should add `GuardianDb.ExpiredSweeper` to your supervision tree.
 
 ```elixir
   worker(GuardianDb.ExpiredSweeper, [])
@@ -64,9 +64,9 @@ To sweep expired tokens from your db you should add `GuardianDb` to your supervi
 
 ## Guardian >= 1.0
 
-GuardianDb works by hooking into the lifecycle of your token module.
+`GuardianDb` works by hooking into the lifecycle of your token module.
 
-You'll need to add it to
+You'll need to add it to:
 
 * `after_encode_and_sign`
 * `on_verify`
