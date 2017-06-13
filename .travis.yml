@@ -1,6 +1,8 @@
 language: elixir
+services:
+  - postgresql
 addons:
-  postgresql: "9.6"
+  postgresql: "9.5"
 elixir:
   - 1.4
   - 1.3
