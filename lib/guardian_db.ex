@@ -106,7 +106,6 @@ defmodule GuardianDb do
          hooks: GuardianDb
   ```
   """
-  use Guardian.Hooks
 
   config = Application.get_env(:guardian_db, GuardianDb, [])
   @repo Keyword.get(config, :repo)
@@ -168,7 +167,7 @@ defmodule GuardianDb do
     Purge any tokens that are expired. This should be done periodically to keep your DB table clean of clutter
     """
     def purge_expired_tokens! do
-      timestamp = Guardian.Utils.timestamp()
+      timestamp = Guardian.timestamp()
       from(t in Token, where: t.exp < ^timestamp) |> GuardianDb.repo.delete_all()
     end
   end
