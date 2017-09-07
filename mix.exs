@@ -1,13 +1,13 @@
 defmodule GuardianDb.Mixfile do
   use Mix.Project
 
-  @version "0.8.0"
+  @version "1.0.0"
 
   def project do
     [app: :guardian_db,
      version: @version,
      description: "DB tracking for token validity",
-     elixir: "~> 1.3 or ~> 1.4",
+     elixir: "~> 1.3 or ~> 1.4 or ~> 1.5",
      elixirc_paths: _elixirc_paths(Mix.env),
      package: package(),
      build_embedded: Mix.env == :prod,
@@ -28,16 +28,16 @@ defmodule GuardianDb.Mixfile do
   defp _elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~> 0.14 or >= 1.0"},
-     {:ecto, "~> 2.1"},
-     {:postgrex, ">= 0.11.1", optional: true},
+    [{:guardian, ">= 1.0"},
+     {:ecto, "~> 2.1 or ~> 2.2"},
+     {:postgrex, ">= 0.11.1 or >= 0.13", optional: true},
      {:ex_doc, ">= 0.16", only: :dev},
      {:earmark, ">= 0.0.0", only: :dev}]
   end
 
   defp package do
     [
-      maintainers: ["Daniel Neighman"],
+      maintainers: ["Daniel Neighman", "Sean Callan", "Sonny Scroggin"],
       licenses: ["MIT"],
       links: %{github: "https://github.com/hassox/guardian_db"},
       files: ~w(lib) ++ ~w(CHANGELOG.md LICENSE mix.exs README.md)

@@ -4,6 +4,8 @@ GuardianDb
 GuardianDB is an extension to vanilla Guardian that tracks tokens in your
 application's database to prevent playback.
 
+Support for `Guardian` 0.14.x is via the 0.8 release.
+
 Installation
 ==========
 
@@ -15,7 +17,7 @@ To install GuardianDb, first add it to your `mix.exs` file:
     defp deps do
       [
       # ...
-      {:guardian_db, "~> 0.8.0"}
+      {:guardian_db, "~> 1.0.0"}
       # ...
       ]
     end
@@ -62,8 +64,6 @@ To sweep expired tokens from your db you should add `GuardianDb.ExpiredSweeper` 
   worker(GuardianDb.ExpiredSweeper, [])
 ```
 
-## Guardian >= 1.0
-
 `GuardianDb` works by hooking into the lifecycle of your token module.
 
 You'll need to add it to:
@@ -98,16 +98,6 @@ defmodule MyApp.AuthTokens do
     end
   end
 end
-```
-
-## Guardian < 1.0
-
-To use `GuardianDb` with Guardian less than version 1.0, add GuardianDb as your
-hooks module. In the Guardian configuration:
-
-```elixir
-config :guardian, Guardian,
-       hooks: GuardianDb
 ```
 
 Now run the migration and you'll be good to go.
