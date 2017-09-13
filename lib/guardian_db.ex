@@ -109,12 +109,6 @@ defmodule GuardianDb do
 
   alias GuardianDb.Token
 
-  config = Application.get_env(:guardian_db, GuardianDb, [])
-  @repo Keyword.get(config, :repo)
-
-  if length(config) == 0, do: raise("GuardianDb configuration is required")
-  if is_nil(@repo), do: raise("GuardianDb requires a repo")
-
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking
   """
@@ -155,5 +149,9 @@ defmodule GuardianDb do
     end
   end
 
-  def repo, do: @repo
+  def repo do
+    :guardian_db
+    |> Application.fetch_env!(GuardianDb)
+    |> Keyword.fetch!(:repo)
+  end
 end
