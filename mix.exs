@@ -25,7 +25,7 @@ defmodule GuardianDb.Mixfile do
   defp applications(_), do: [:logger]
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(_),     do: ["lib"]
 
   defp deps do
     [{:guardian, ">= 1.0.0-beta.0"},

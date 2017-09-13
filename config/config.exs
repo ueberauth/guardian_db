@@ -3,7 +3,7 @@ use Mix.Config
 config :guardian, Guardian,
   issuer: "GuardianDb",
   secret_key: "woeirulkjosiujgwpeiojlkjw3prowiuefoskjd",
-  serializer: Guardian.TestGuardianSerializer
+  serializer: GuardianDb.Test.Serializer
 
 config :guardian_db, GuardianDb,
   repo: GuardianDb.Test.Repo
