@@ -45,15 +45,14 @@ defmodule Guardian.DB do
 
   ```elixir
     create table(:guardian_tokens, primary_key: false) do
-      add :jti, :string, primary_key: true
-      add :typ, :string
-      add :aud, :string
-      add :iss, :string
-      add :sub, :string
-      add :exp, :bigint
-      add :jwt, :text
-      add :claims, :map
-
+      add(:jti, :string, primary_key: true)
+      add(:typ, :string)
+      add(:aud, :string)
+      add(:iss, :string)
+      add(:sub, :string)
+      add(:exp, :bigint)
+      add(:jwt, :text)
+      add(:claims, :map)
       timestamps()
     end
   ```
@@ -119,7 +118,7 @@ defmodule Guardian.DB do
   After the JWT is generated, stores the various fields of it in the DB for tracking
   """
   def after_encode_and_sign(resource, type, claims, jwt) do
-    case Token.create!(claims, jwt) do
+    case Token.create(claims, jwt) do
       {:error, _} -> {:error, :token_storage_failure}
       _ -> {:ok, {resource, type, claims, jwt}}
     end

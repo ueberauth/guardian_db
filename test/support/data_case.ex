@@ -1,8 +1,9 @@
 defmodule Guardian.DB.Test.DataCase do
   use ExUnit.CaseTemplate
   alias Guardian.DB.Test.Repo
+  alias Guardian.DB.Token
 
-  using(_opts) do
+  using _opts do
     quote do
       import Guardian.DB.Test.DataCase
       alias Guardian.DB.Test.Repo
@@ -14,4 +15,7 @@ defmodule Guardian.DB.Test.DataCase do
     Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
     :ok
   end
+
+  def get_token(token_id \\ "token-uuid"),
+    do: Repo.get(Token.query_schema(), token_id)
 end
