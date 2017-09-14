@@ -5,7 +5,7 @@ defmodule GuardianDb.Token do
 
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query
+  import Ecto.Query, only: [from: 2]
 
   alias GuardianDb.Token
 
@@ -14,6 +14,8 @@ defmodule GuardianDb.Token do
   @primary_key {:jti, :string, autogenerate: false}
   @schema_name Keyword.get(config, :schema_name, "guardian_tokens")
   @schema_prefix Keyword.get(config, :prefix)
+
+  @allowed_fields ~w(jti typ aud iss sub exp jwt claims)a
 
   schema @schema_name do
     field :typ, :string
@@ -46,7 +48,7 @@ defmodule GuardianDb.Token do
       |> Map.put("claims", claims)
 
     %Token{}
-    |> cast(prepared_claims, [:jti, :typ, :aud, :iss, :sub, :exp, :jwt, :claims])
+    |> cast(prepared_claims, @allowed_fields)
     |> GuardianDb.repo.insert()
   end
 
@@ -55,6 +57,9 @@ defmodule GuardianDb.Token do
   """
   def purge_expired_tokens! do
     timestamp = Guardian.timestamp()
-    from(t in Token, where: t.exp < ^timestamp) |> GuardianDb.repo.delete_all()
+    query = from token in Token,
+              where: token.exp < ^timestamp
+
+    GuardianDb.repo.delete_all(query)
   end
 end

@@ -11,6 +11,8 @@ defmodule GuardianDb.ExpiredSweeper do
   """
   use GenServer
 
+  alias GuardianDb.Token
+
   def start_link, do: start_link([])
 
   def start_link(state, _opts \\ []) do
@@ -55,7 +57,7 @@ defmodule GuardianDb.ExpiredSweeper do
   end
 
   defp sweep!(state) do
-    GuardianDb.Token.purge_expired_tokens!
+    Token.purge_expired_tokens!
     reset_state_timer!(state)
   end
 
