@@ -1,11 +1,9 @@
 defmodule GuardianDbTest do
-  use GuardianDb.TestCase
-
+  use GuardianDb.Test.DataCase
   alias GuardianDb.Token
-  alias GuardianDb.Test.Repo
 
   setup do
-    { :ok, %{
+    {:ok, %{
         claims: %{
           "jti" => "token-uuid",
           "aud" => "token",

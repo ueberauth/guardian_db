@@ -1,7 +1,7 @@
 GuardianDb
 ==========
 
-GuardianDB is an extension to vanilla Guardian that tracks tokens in your
+GuardianDb is an extension to vanilla Guardian that tracks tokens in your
 application's database to prevent playback.
 
 Support for `Guardian` 0.14.x is via the 0.8 release.
