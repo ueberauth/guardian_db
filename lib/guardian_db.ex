@@ -72,7 +72,7 @@ defmodule GuardianDb do
 
   ```elixir
   defmodule MyApp.AuthTokens do
-    use Guardain, otp_app: :my_app
+    use Guardian, otp_app: :my_app
 
     # snip...
 
