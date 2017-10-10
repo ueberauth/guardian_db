@@ -112,8 +112,8 @@ defmodule GuardianDb do
   config = Application.get_env(:guardian_db, GuardianDb, [])
   @repo Keyword.get(config, :repo)
 
-  if length(config) == 0, do: raise "GuardianDb configuration is required"
-  if is_nil(@repo), do: raise "GuardianDb requires a repo"
+  if length(config) == 0, do: raise("GuardianDb configuration is required")
+  if is_nil(@repo), do: raise("GuardianDb requires a repo")
 
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking
@@ -121,7 +121,7 @@ defmodule GuardianDb do
   def after_encode_and_sign(resource, type, claims, jwt) do
     case Token.create!(claims, jwt) do
       {:error, _} -> {:error, :token_storage_failure}
-      _           -> {:ok, {resource, type, claims, jwt}}
+      _ -> {:ok, {resource, type, claims, jwt}}
     end
   end
 
@@ -131,7 +131,7 @@ defmodule GuardianDb do
   """
   def on_verify(claims, jwt) do
     case Token.find_by_claims(claims) do
-      nil    -> {:error, :token_not_found}
+      nil -> {:error, :token_not_found}
       _token -> {:ok, {claims, jwt}}
     end
   end
@@ -141,16 +141,17 @@ defmodule GuardianDb do
   """
   def on_revoke(claims, jwt) do
     claims
-    |> Token.find_by_claims
+    |> Token.find_by_claims()
     |> destroy_token(claims, jwt)
   end
 
   defp destroy_token(nil, claims, jwt), do: {:ok, {claims, jwt}}
+
   defp destroy_token(model, claims, jwt) do
     case repo().delete(model) do
       {:error, _} -> {:error, :could_not_revoke_token}
-      nil         -> {:error, :could_not_revoke_token}
-      _           -> {:ok, {claims, jwt}}
+      nil -> {:error, :could_not_revoke_token}
+      _ -> {:ok, {claims, jwt}}
     end
   end
 
