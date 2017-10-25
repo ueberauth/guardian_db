@@ -16,16 +16,21 @@ defmodule Mix.Tasks.GuardianDb.Gen.Migration do
 
     Generator.create_directory("./priv/repo/migrations")
 
-    source_path = Path.join(Application.app_dir(:guardian_db), "priv/templates/migration.exs")
+    source_path =
+      :guardian_db
+      |> Application.app_dir()
+      |> Path.join("priv/templates/migration.exs")
 
     generated_file = EEx.eval_file(source_path, [module_prefix: app_module()])
     target_file = Path.join("priv/repo/migrations", "#{timestamp()}_guardiandb.exs")
     Generator.create_file(target_file, generated_file)
-
   end
 
   defp app_module do
-    Mix.Project.config |> Keyword.fetch!(:app) |> to_string() |> Macro.camelize()
+    Mix.Project.config
+    |> Keyword.fetch!(:app)
+    |> to_string()
+    |> Macro.camelize()
   end
 
   defp timestamp do
@@ -35,5 +40,4 @@ defmodule Mix.Tasks.GuardianDb.Gen.Migration do
 
   defp pad(i) when i < 10, do: << ?0, ?0 + i >>
   defp pad(i), do: to_string(i)
-
 end
