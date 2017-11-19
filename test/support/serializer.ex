@@ -1,6 +1,11 @@
-defmodule GuardianDb.Test.Serializer do
-  @behaviour Guardian.Serializer
+defmodule Guardian.DB.Test.Serializer do
+  use Guardian, otp_app: :guardian_db
 
-  def for_token(sub), do: {:ok, sub}
-  def from_token(sub), do: {:ok, sub}
+  def subject_for_token(resource, _claims) do
+    {:ok, resource}
+  end
+
+  def resource_from_claims(claims) do
+    {:ok, claims["sub"]}
+  end
 end

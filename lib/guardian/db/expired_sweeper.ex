@@ -1,17 +1,17 @@
-defmodule GuardianDb.ExpiredSweeper do
+defmodule Guardian.DB.ExpiredSweeper do
   @moduledoc """
   Periocially purges expired tokens from the DB.
 
   ## Example
-    config :guardian_db, GuardianDb,
+    config :guardian, Guardian.DB,
       sweep_interval: 60 # 1 hour
 
     # in your supervisor
-      worker(GuardianDb.ExpiredSweeper, [])
+      worker(Guardian.DB.ExpiredSweeper, [])
   """
   use GenServer
 
-  alias GuardianDb.Token
+  alias Guardian.DB.Token
 
   def start_link, do: start_link([])
 
@@ -71,8 +71,8 @@ defmodule GuardianDb.ExpiredSweeper do
   end
 
   defp interval do
-    :guardian_db
-    |> Application.get_env(GuardianDb)
+    :guardian
+    |> Application.get_env(Guardian.DB)
     |> Keyword.get(:sweep_interval, 60)
     |> minute_to_ms
   end

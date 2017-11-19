@@ -1,4 +1,4 @@
-defmodule GuardianDb.Test.Repo.Migrations do
+defmodule Guardian.DB.Test.Repo.Migrations do
   use Ecto.Migration
 
   def up do
