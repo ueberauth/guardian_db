@@ -19,7 +19,7 @@ defmodule Mix.Tasks.GuardianDb.Gen.Migration do
     source_path =
       :guardian_db
       |> Application.app_dir()
-      |> Path.join("priv/templates/migration.exs")
+      |> Path.join("priv/templates/migration.exs.eex")
 
     generated_file = EEx.eval_file(source_path, [module_prefix: app_module()])
     target_file = Path.join("priv/repo/migrations", "#{timestamp()}_guardiandb.exs")
