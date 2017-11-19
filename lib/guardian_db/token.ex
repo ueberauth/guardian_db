@@ -18,13 +18,13 @@ defmodule GuardianDb.Token do
   @allowed_fields ~w(jti typ aud iss sub exp jwt claims)a
 
   schema @schema_name do
-    field :typ, :string
-    field :aud, :string
-    field :iss, :string
-    field :sub, :string
-    field :exp, :integer
-    field :jwt, :string
-    field :claims, :map
+    field(:typ, :string)
+    field(:aud, :string)
+    field(:iss, :string)
+    field(:sub, :string)
+    field(:exp, :integer)
+    field(:jwt, :string)
+    field(:claims, :map)
 
     timestamps()
   end
@@ -35,7 +35,7 @@ defmodule GuardianDb.Token do
   def find_by_claims(claims) do
     jti = Map.get(claims, "jti")
     aud = Map.get(claims, "aud")
-    GuardianDb.repo.get_by(Token, jti: jti, aud: aud)
+    GuardianDb.repo().get_by(Token, jti: jti, aud: aud)
   end
 
   @doc """
@@ -49,7 +49,7 @@ defmodule GuardianDb.Token do
 
     %Token{}
     |> cast(prepared_claims, @allowed_fields)
-    |> GuardianDb.repo.insert()
+    |> GuardianDb.repo().insert()
   end
 
   @doc """
@@ -57,9 +57,8 @@ defmodule GuardianDb.Token do
   """
   def purge_expired_tokens! do
     timestamp = Guardian.timestamp()
-    query = from token in Token,
-              where: token.exp < ^timestamp
+    query = from(token in Token, where: token.exp < ^timestamp)
 
-    GuardianDb.repo.delete_all(query)
+    GuardianDb.repo().delete_all(query)
   end
 end
