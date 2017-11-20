@@ -27,25 +27,7 @@ Then run `mix deps.get` on your terminal.
 
 You will then need to add a migration:
 
-```elixir
-    defmodule MyApp.Repo.Migrations.GuardianDb do
-      use Ecto.Migration
-
-      def change do
-        create table(:guardian_tokens, primary_key: false) do
-          add :jti, :string, primary_key: true
-          add :aud, :string, primary_key: true
-          add :typ, :string
-          add :iss, :string
-          add :sub, :string
-          add :exp, :bigint
-          add :jwt, :text
-          add :claims, :map
-          timestamps()
-        end
-      end
-    end
-```
+run `mix guardian_db.gen.migration` to generate a migration.
 
 **Do not run the migration yet,** we need to complete our setup first.
 
