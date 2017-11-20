@@ -6,28 +6,33 @@ defmodule Mix.Tasks.GuardianDb.Gen.Migration do
   """
   use Mix.Task
 
-  alias Mix.Generator
+  import Mix.Ecto
+  import Mix.Generator
 
   @doc false
-  def run(_args) do
-    if Mix.Project.umbrella?() do
-      Mix.raise "mix guardian_db.gen.migration can only be run inside an application directory"
-    end
+  def run(args) do
+    no_umbrella!("ecto.gen.migration")
 
-    Generator.create_directory("./priv/repo/migrations")
+    repos = parse_repo(args)
 
-    source_path =
-      :guardian_db
-      |> Application.app_dir()
-      |> Path.join("priv/templates/migration.exs.eex")
+    Enum.each(repos, fn repo ->
+      ensure_repo(repo, args)
+      path = migrations_path(repo)
 
-    generated_file = EEx.eval_file(source_path, [module_prefix: app_module()])
-    target_file = Path.join("priv/repo/migrations", "#{timestamp()}_guardiandb.exs")
-    Generator.create_file(target_file, generated_file)
+      source_path =
+        :guardian_db
+        |> Application.app_dir()
+        |> Path.join("priv/templates/migration.exs.eex")
+
+      generated_file = EEx.eval_file(source_path, module_prefix: app_module())
+      target_file = Path.join(path, "#{timestamp()}_guardiandb.exs")
+      create_directory(path)
+      create_file(target_file, generated_file)
+    end)
   end
 
   defp app_module do
-    Mix.Project.config
+    Mix.Project.config()
     |> Keyword.fetch!(:app)
     |> to_string()
     |> Macro.camelize()
@@ -38,6 +43,6 @@ defmodule Mix.Tasks.GuardianDb.Gen.Migration do
     "#{y}#{pad(m)}#{pad(d)}#{pad(hh)}#{pad(mm)}#{pad(ss)}"
   end
 
-  defp pad(i) when i < 10, do: << ?0, ?0 + i >>
+  defp pad(i) when i < 10, do: <<?0, ?0 + i>>
   defp pad(i), do: to_string(i)
 end
