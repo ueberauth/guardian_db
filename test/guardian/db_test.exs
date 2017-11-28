@@ -1,20 +1,17 @@
-defmodule Guardian.DBTest do
+defmodule Guardian.DB.Test do
   use Guardian.DB.Test.DataCase
   alias Guardian.DB.Token
 
-  defp get_token(token_id \\ "token-uuid"), do: Repo.get(Token.query_schema(), token_id)
-
   setup do
     {:ok, %{
-        claims: %{
-          "jti" => "token-uuid",
-          "aud" => "token",
-          "sub" => "the_subject",
-          "iss" => "the_issuer",
-          "exp" => Guardian.timestamp() + 1_000_000_000,
-        }
+      claims: %{
+        "jti" => "token-uuid",
+        "aud" => "token",
+        "sub" => "the_subject",
+        "iss" => "the_issuer",
+        "exp" => Guardian.timestamp() + 1_000_000_000
       }
-    }
+    }}
   end
 
   test "after_encode_and_sign_in is successful", context do
@@ -35,7 +32,7 @@ defmodule Guardian.DBTest do
   end
 
   test "on_verify with a record in the db", context do
-    Token.create! context.claims, "The JWT"
+    Token.create(context.claims, "The JWT")
     token = get_token()
     assert token != nil
 
@@ -55,7 +52,7 @@ defmodule Guardian.DBTest do
   end
 
   test "on_revoke with a record in the db", context do
-    Token.create! context.claims, "The JWT"
+    Token.create(context.claims, "The JWT")
 
     token = get_token()
     assert token != nil
@@ -67,10 +64,10 @@ defmodule Guardian.DBTest do
   end
 
   test "purge stale tokens" do
-    Token.create! %{"jti" => "token1", "exp" => Guardian.timestamp + 5000}, "Token 1"
-    Token.create! %{"jti" => "token2", "exp" => Guardian.timestamp - 5000}, "Token 2"
+    Token.create(%{"jti" => "token1", "exp" => Guardian.timestamp() + 5000}, "Token 1")
+    Token.create(%{"jti" => "token2", "exp" => Guardian.timestamp() - 5000}, "Token 2")
 
-    Token.purge_expired_tokens!
+    Token.purge_expired_tokens()
 
     token1 = get_token("token1")
     token2 = get_token("token2")

@@ -37,7 +37,7 @@ defmodule Guardian.DB.Token do
   @doc """
   Create a new new token based on the JWT and decoded claims
   """
-  def create!(claims, jwt) do
+  def create(claims, jwt) do
     prepared_claims =
       claims
       |> Map.put("jwt", jwt)
@@ -52,7 +52,7 @@ defmodule Guardian.DB.Token do
   @doc """
   Purge any tokens that are expired. This should be done periodically to keep your DB table clean of clutter
   """
-  def purge_expired_tokens! do
+  def purge_expired_tokens do
     timestamp = Guardian.timestamp()
 
     query_schema()
@@ -60,10 +60,12 @@ defmodule Guardian.DB.Token do
     |> Guardian.DB.repo().delete_all()
   end
 
+  @doc false
   def query_schema do
     {schema_name(), Token}
   end
 
+  @doc false
   def schema_name do
     :guardian
     |> Application.fetch_env!(Guardian.DB)

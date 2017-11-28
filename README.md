@@ -40,10 +40,10 @@ run `mix guardian_db.gen.migration` to generate a migration.
          sweep_interval: 60 # default: 60 minutes
 ```
 
-To sweep expired tokens from your db you should add `Guardian.DB.ExpiredSweeper` to your supervision tree.
+To sweep expired tokens from your db you should add `Guardian.DB.Token.SweeperServer` to your supervision tree.
 
 ```elixir
-  worker(Guardian.DB.ExpiredSweeper, [])
+  worker(Guardian.DB.Token.SweeperServer, [])
 ```
 
 `Guardian.DB` works by hooking into the lifecycle of your token module.
