@@ -1,16 +1,15 @@
 use Mix.Config
 
-config :guardian, Guardian,
-  issuer: "GuardianDb",
-  secret_key: "woeirulkjosiujgwpeiojlkjw3prowiuefoskjd",
-  serializer: GuardianDb.Test.Serializer
+config :guardian, Guardian.DB,
+  issuer: "GuardianDB",
+  secret_key: "HcdlxxmyDRvfrwdpjUPh2M8mWP+KtpOQK1g6fT5SHrnflSY8KiWeORqN6IZSJYTA"
 
-config :guardian_db, GuardianDb,
-  repo: GuardianDb.Test.Repo
+config :guardian, Guardian.DB,
+  repo: Guardian.DB.Test.Repo
 
-config :guardian_db, ecto_repos: [GuardianDb.Test.Repo]
+config :guardian_db, ecto_repos: [Guardian.DB.Test.Repo]
 
-config :guardian_db, GuardianDb.Test.Repo,
+config :guardian_db, Guardian.DB.Test.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "guardian_db_test",
   pool: Ecto.Adapters.SQL.Sandbox,

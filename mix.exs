@@ -1,4 +1,4 @@
-defmodule GuardianDb.Mixfile do
+defmodule Guardian.DB.Mixfile do
   use Mix.Project
 
   @version "1.0.0"

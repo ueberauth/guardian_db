@@ -1,11 +1,11 @@
-defmodule GuardianDb do
+defmodule Guardian.DB do
   @moduledoc """
-  GuardianDb is a simple module that hooks into guardian to prevent playback of tokens.
+  Guardian.DB is a simple module that hooks into guardian to prevent playback of tokens.
 
   In vanilla Guardian, tokens aren't tracked so the main mechanism
   that exists to make a token inactive is to set the expiry and wait until it arrives.
 
-  GuardianDb takes an active role and stores each token in the database verifying it's presense
+  Guardian.DB takes an active role and stores each token in the database verifying it's presense
   (based on it's jti) when Guardian verifies the token.
   If the token is not present in the DB, the Guardian token cannot be verified.
 
@@ -31,17 +31,17 @@ defmodule GuardianDb do
 
   ### Sweeper
 
-  In order to sweep your expired tokens from the db, you'll need to add `GuardianDb.ExpiredSweeper`
+  In order to sweep your expired tokens from the db, you'll need to add `Guardian.DB.ExpiredSweeper`
   to your supervision tree.
   In your supervisor add it as a worker
 
   ```elixir
-  worker(GuardianDb.ExpiredSweeper, [])
+  worker(Guardian.DB.ExpiredSweeper, [])
   ```
 
   # Migration
 
-  GuardianDb requires a table in your database. Create a migration like the following:
+  Guardian.DB requires a table in your database. Create a migration like the following:
 
   ```elixir
     create table(:guardian_tokens, primary_key: false) do
@@ -60,7 +60,7 @@ defmodule GuardianDb do
 
   # Setup (Guardian >= 1.0)
 
-  GuardianDb works by hooking into the lifecycle of your token module.
+  Guardian.DB works by hooking into the lifecycle of your token module.
 
   You'll need to add it to
 
@@ -77,19 +77,19 @@ defmodule GuardianDb do
     # snip...
 
     def after_encode_and_sign(resource, claims, token, _options) do
-      with {:ok, _} <- GuardianDb.after_encode_and_sign(resource, claims["typ"], claims, token) do
+      with {:ok, _} <- Guardian.DB.after_encode_and_sign(resource, claims["typ"], claims, token) do
         {:ok, token}
       end
     end
 
     def on_verify(claims, token, _options) do
-      with {:ok, _} <- GuardianDb.on_verify(claims, token) do
+      with {:ok, _} <- Guardian.DB.on_verify(claims, token) do
         {:ok, claims}
       end
     end
 
     def on_revoke(claims, token, _options) do
-      with {:ok, _} <- GuardianDb.on_revoke(claims, token) do
+      with {:ok, _} <- Guardian.DB.on_revoke(claims, token) do
         {:ok, claims}
       end
     end
@@ -98,16 +98,22 @@ defmodule GuardianDb do
 
   # Setup (Guardian < 1.0)
 
-  To use `GuardianDb` with Guardian less than version 1.0, add GuardianDb as your
+  To use `Guardian.DB` with Guardian less than version 1.0, add Guardian.DB as your
   hooks module. In the Guardian configuration:
 
   ```elixir
   config :guardian, Guardian,
-    hooks: GuardianDb
+    hooks: Guardian.DB
   ```
   """
 
-  alias GuardianDb.Token
+  alias Guardian.DB.Token
+
+  config = Application.get_env(:guardian, Guardian.DB, [])
+  @repo Keyword.get(config, :repo)
+
+  if config == [], do: raise("Guardian.DB configuration is required")
+  if is_nil(@repo), do: raise("Guardian.DB requires a repo")
 
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking
@@ -150,8 +156,8 @@ defmodule GuardianDb do
   end
 
   def repo do
-    :guardian_db
-    |> Application.fetch_env!(GuardianDb)
+    :guardian
+    |> Application.fetch_env!(Guardian.DB)
     |> Keyword.fetch!(:repo)
   end
 end

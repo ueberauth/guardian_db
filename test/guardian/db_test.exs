@@ -1,6 +1,6 @@
-defmodule GuardianDbTest do
-  use GuardianDb.Test.DataCase
-  alias GuardianDb.Token
+defmodule Guardian.DBTest do
+  use Guardian.DB.Test.DataCase
+  alias Guardian.DB.Token
 
   defp get_token(token_id \\ "token-uuid"), do: Repo.get(Token.query_schema(), token_id)
 
@@ -21,7 +21,7 @@ defmodule GuardianDbTest do
     token = get_token()
     assert token == nil
 
-    GuardianDb.after_encode_and_sign(%{}, :token, context.claims, "The JWT")
+    Guardian.DB.after_encode_and_sign(%{}, :token, context.claims, "The JWT")
 
     token = get_token()
 
@@ -39,19 +39,19 @@ defmodule GuardianDbTest do
     token = get_token()
     assert token != nil
 
-    assert {:ok, {context.claims, "The JWT"}} == GuardianDb.on_verify(context.claims, "The JWT")
+    assert {:ok, {context.claims, "The JWT"}} == Guardian.DB.on_verify(context.claims, "The JWT")
   end
 
   test "on_verify without a record in the db", context do
     token = get_token()
     assert token == nil
-    assert {:error, :token_not_found} == GuardianDb.on_verify(context.claims, "The JWT")
+    assert {:error, :token_not_found} == Guardian.DB.on_verify(context.claims, "The JWT")
   end
 
   test "on_revoke without a record in the db", context do
     token = get_token()
     assert token == nil
-    assert GuardianDb.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
+    assert Guardian.DB.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
   end
 
   test "on_revoke with a record in the db", context do
@@ -60,7 +60,7 @@ defmodule GuardianDbTest do
     token = get_token()
     assert token != nil
 
-    assert GuardianDb.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
+    assert Guardian.DB.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
 
     token = get_token()
     assert token == nil

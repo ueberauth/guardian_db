@@ -1,11 +1,11 @@
-defmodule GuardianDb.Test.DataCase do
+defmodule Guardian.DB.Test.DataCase do
   use ExUnit.CaseTemplate
-  alias GuardianDb.Test.Repo
+  alias Guardian.DB.Test.Repo
 
   using(_opts) do
     quote do
-      import GuardianDb.Test.DataCase
-      alias GuardianDb.Test.Repo
+      import Guardian.DB.Test.DataCase
+      alias Guardian.DB.Test.Repo
     end
   end
 

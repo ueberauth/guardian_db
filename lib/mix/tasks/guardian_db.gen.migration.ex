@@ -1,5 +1,5 @@
-defmodule Mix.Tasks.GuardianDb.Gen.Migration do
-  @shortdoc "Generates GuardianDb's migration"
+defmodule Mix.Tasks.Guardian.DB.Gen.Migration do
+  @shortdoc "Generates Guardian.DB's migration"
 
   @moduledoc """
   Generates the required GuardianDb's database migration
