@@ -115,13 +115,14 @@ defmodule Guardian.DB do
   if is_nil(@repo), do: raise("Guardian.DB requires a repo")
 
   @doc """
-  After the JWT is generated, stores the various fields of it in the DB for tracking if
-  token type matches the configured types to be stored.
+  After the JWT is generated, stores the various fields of it in the DB for tracking.
+  If the token type does not match the configured types to be stored, the claims are
+  passed through.
   """
   def after_encode_and_sign(resource, type, claims, jwt) do
     case store_token(type, claims, jwt) do
       {:error, _} -> {:error, :token_storage_failure}
-      _           -> {:ok, {resource, type, claims, jwt}}
+      _ -> {:ok, {resource, type, claims, jwt}}
     end
   end
 
@@ -129,20 +130,20 @@ defmodule Guardian.DB do
     if storable_type?(type) do
       Token.create(claims, jwt)
     else
-      :non_storable_type # skip token creation for this type
+      :ignore
     end
   end
 
-
   @doc """
-  When a token is verified, check to make sure that it is present in the DB if it 
-  matches the configured token storage types.
+  When a token is verified, check to make sure that it is present in the DB.
   If the token is found, the verification continues, if not an error is returned.
+  If the type of the token does not match the configured token storage types,
+  the claims are passed through.
   """
   def on_verify(claims, jwt) do
     case find_token(claims) do
       nil -> {:error, :token_not_found}
-      _   -> {:ok, {claims, jwt}}
+      _ -> {:ok, {claims, jwt}}
     end
   end
 
@@ -150,7 +151,7 @@ defmodule Guardian.DB do
     if storable_type?(type) do
       Token.find_by_claims(claims)
     else
-      :ok # ingore verify for this type
+      :ignore
     end
   end
 
