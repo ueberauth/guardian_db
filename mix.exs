@@ -1,61 +1,71 @@
-defmodule GuardianDb.Mixfile do
+defmodule Guardian.DB.Mixfile do
   use Mix.Project
 
-  @version "0.8.0"
+  @version "1.0.0"
+  @source_url "https://github.com/ueberauth/guardian_db"
 
   def project do
-    [app: :guardian_db,
-     version: @version,
-     description: "DB tracking for token validity",
-     elixir: "~> 1.3",
-     elixirc_paths: _elixirc_paths(Mix.env),
-     package: package(),
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     preferred_cli_env: [guardian_db: :test],
-     aliases: aliases(),
-     deps: deps()]
+    [
+      name: "Guardian.DB",
+      app: :guardian_db,
+      version: @version,
+      description: "DB tracking for token validity",
+      elixir: "~> 1.4 or ~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      package: package(),
+      docs: docs(),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      preferred_cli_env: [guardian_db: :test],
+      aliases: aliases(),
+      deps: deps()
+    ]
   end
 
   def application do
-    [applications: _applications(Mix.env)]
+    [extra_applications: [:logger]]
   end
 
-  defp _applications(:test), do: [:postgrex, :ecto, :logger]
-  defp _applications(:test_config), do: _applications(:test)
-  defp _applications(_), do: [:logger]
-
-  defp _elixirc_paths(:test), do: ["lib", "test/support"]
-  defp _elixirc_paths(:test_config), do: _elixirc_paths(:test)
-  defp _elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:guardian, "~> 0.14"},
-     {:ecto, "~> 2.1"},
-     {:postgrex, ">= 0.11.1", optional: true},
-     {:ex_doc, "~> 0.8", only: :dev},
-     {:earmark, ">= 0.0.0", only: :dev}]
+    [
+      {:guardian, "~> 1.0"},
+      {:ecto, "~> 2.2"},
+      {:postgrex, "~> 0.13", optional: true},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false}
+    ]
   end
 
   defp package do
     [
-      maintainers: ["Daniel Neighman"],
+      maintainers: ["Daniel Neighman", "Sean Callan", "Sonny Scroggin"],
       licenses: ["MIT"],
-      links: %{github: "https://github.com/hassox/guardian_db"},
-      files: ~w(lib) ++ ~w(CHANGELOG.md LICENSE mix.exs README.md)
+      links: %{GitHub: @source_url},
+      files: [
+        "lib",
+        "CHANGELOG.md",
+        "LICENSE",
+        "mix.exs",
+        "README.md",
+        "priv/templates"
+      ]
+    ]
+  end
+
+  defp docs do
+    [
+      main: "readme",
+      homepage_url: @source_url,
+      source_ref: "v#{@version}",
+      source_url: @source_url,
+      extras: ["README.md"]
     ]
   end
 
   defp aliases do
-    ["test": ["ecto.create --quiet", "ecto.migrate", "test"],
-     "test.all": [&run_tests/1, &run_config_tests/1]]
-  end
-
-  defp run_tests(_) do
-    Mix.shell.cmd("MIX_ENV=test mix test --color")
-  end
-
-  defp run_config_tests(_) do
-    Mix.shell.cmd("MIX_ENV=test_config mix test test/guardian_db/config_test.exs --include config_test --color")
+    [test: ["ecto.create --quiet", "ecto.migrate", "test"]]
   end
 end

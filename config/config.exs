@@ -1,5 +1,14 @@
 use Mix.Config
 
-config :guardian_db, GuardianDb, repo: %{}
+config :guardian, Guardian.DB,
+  issuer: "GuardianDB",
+  secret_key: "HcdlxxmyDRvfrwdpjUPh2M8mWP+KtpOQK1g6fT5SHrnflSY8KiWeORqN6IZSJYTA",
+  repo: Guardian.DB.Test.Repo
 
-import_config "#{Mix.env}.exs"
+config :guardian_db, ecto_repos: [Guardian.DB.Test.Repo]
+
+config :guardian_db, Guardian.DB.Test.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "guardian_db_test",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  priv: "priv/test"
