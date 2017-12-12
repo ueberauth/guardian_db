@@ -4,3 +4,5 @@ erl_crash.dump
 *.ez
 doc/*
 .DS_Store
+/priv/temp
+/tmp

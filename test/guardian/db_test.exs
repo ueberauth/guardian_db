@@ -64,8 +64,8 @@ defmodule Guardian.DB.Test do
   end
 
   test "purge stale tokens" do
-    Token.create(%{"jti" => "token1", "exp" => Guardian.timestamp() + 5000}, "Token 1")
-    Token.create(%{"jti" => "token2", "exp" => Guardian.timestamp() - 5000}, "Token 2")
+    Token.create(%{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000}, "Token 1")
+    Token.create(%{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000}, "Token 2")
 
     Token.purge_expired_tokens()
 

@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Guardian.DB.Gen.Migration do
+defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
   @shortdoc "Generates Guardian.DB's migration"
 
   @moduledoc """
@@ -27,7 +27,7 @@ defmodule Mix.Tasks.Guardian.DB.Gen.Migration do
       generated_file = EEx.eval_file(source_path, module_prefix: app_module())
       target_file = Path.join(path, "#{timestamp()}_guardiandb.exs")
       create_directory(path)
-      create_file(target_file, generated_file)
+      File.write(target_file, generated_file)
     end)
   end
 
