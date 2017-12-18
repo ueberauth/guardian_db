@@ -21,7 +21,7 @@ defmodule Guardian.DB.Test.Support.FileHelpers do
     if path == Path.absname(path) do
       fun.(path)
     else
-      raise "Expected an abs path"
+      raise "Expected an absolute path"
     end
   end
 
