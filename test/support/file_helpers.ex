@@ -26,6 +26,6 @@ defmodule Guardian.DB.Test.Support.FileHelpers do
   end
 
   def destroy_tmp_dir(path) do
-    t = path |> tmp_path() |> destroy_dir()
+    path |> tmp_path() |> destroy_dir()
   end
 end
