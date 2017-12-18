@@ -12,7 +12,7 @@ defmodule Guardian.DB.Test.DataCase do
   end
 
   setup_all do
-    on_exit(fn -> destroy_tmp_dir("priv/test/migrations") end)
+    on_exit(fn -> destroy_tmp_dir("priv/temp/guardian_db_test") end)
     :ok
   end
 

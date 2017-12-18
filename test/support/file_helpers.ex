@@ -2,7 +2,7 @@ defmodule Guardian.DB.Test.Support.FileHelpers do
   @moduledoc false
 
   def tmp_path do
-    Path.expand("../../tmp", __DIR__)
+    Path.expand("../../priv/temp", __DIR__)
   end
 
   def tmp_path(path) do
@@ -26,6 +26,6 @@ defmodule Guardian.DB.Test.Support.FileHelpers do
   end
 
   def destroy_tmp_dir(path) do
-    path |> tmp_path() |> destroy_dir()
+    t = path |> tmp_path() |> destroy_dir()
   end
 end

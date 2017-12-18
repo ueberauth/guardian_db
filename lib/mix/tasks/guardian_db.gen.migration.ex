@@ -27,7 +27,7 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
       generated_file = EEx.eval_file(source_path, module_prefix: app_module())
       target_file = Path.join(path, "#{timestamp()}_guardiandb.exs")
       create_directory(path)
-      File.write(target_file, generated_file)
+      create_file(target_file, generated_file)
     end)
   end
 
