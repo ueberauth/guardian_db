@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.Guardian.DB.Gen.Migration do
+defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
   @shortdoc "Generates Guardian.DB's migration"
 
   @moduledoc """

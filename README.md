@@ -27,7 +27,7 @@ Then run `mix deps.get` on your terminal.
 
 You will then need to add a migration:
 
-run `mix guardian.DB.gen.migration` to generate a migration.
+run `mix guardian.db.gen.migration` to generate a migration.
 
 **Do not run the migration yet,** we need to complete our setup first.
 

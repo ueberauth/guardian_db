@@ -66,6 +66,6 @@ defmodule Guardian.DB.Mixfile do
   end
 
   defp aliases do
-    [test: ["ecto.create --quiet", "ecto.migrate", "test"]]
+    [test: ["ecto.drop --quiet", "ecto.create --quiet", "guardian.db.gen.migration", "ecto.migrate", "test"]]
   end
 end

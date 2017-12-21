@@ -11,4 +11,4 @@ config :guardian_db, Guardian.DB.Test.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "guardian_db_test",
   pool: Ecto.Adapters.SQL.Sandbox,
-  priv: "priv/test"
+  priv: "priv/temp/guardian_db_test"
