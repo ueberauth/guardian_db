@@ -37,6 +37,7 @@ run `mix guardian.db.gen.migration` to generate a migration.
   config :guardian, Guardian.DB,
          repo: MyApp.Repo,
          schema_name: "guardian_tokens", # default
+         token_types: ["refresh_token"], # store all token types if not set
          sweep_interval: 60 # default: 60 minutes
 ```
 

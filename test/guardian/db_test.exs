@@ -6,6 +6,7 @@ defmodule Guardian.DB.Test do
     {:ok, %{
       claims: %{
         "jti" => "token-uuid",
+        "typ" => "token",
         "aud" => "token",
         "sub" => "the_subject",
         "iss" => "the_issuer",
@@ -18,7 +19,7 @@ defmodule Guardian.DB.Test do
     token = get_token()
     assert token == nil
 
-    Guardian.DB.after_encode_and_sign(%{}, :token, context.claims, "The JWT")
+    Guardian.DB.after_encode_and_sign(%{}, "token", context.claims, "The JWT")
 
     token = get_token()
 
