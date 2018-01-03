@@ -31,12 +31,12 @@ defmodule Guardian.DB do
 
   ### Sweeper
 
-  In order to sweep your expired tokens from the db, you'll need to add `Guardian.DB.ExpiredSweeper`
+  In order to sweep your expired tokens from the db, you'll need to add `Guardian.DB.Token.SweeperServer`
   to your supervision tree.
   In your supervisor add it as a worker
 
   ```elixir
-  worker(Guardian.DB.ExpiredSweeper, [])
+  worker(Guardian.DB.Token.SweeperServer, [])
   ```
 
   # Migration
