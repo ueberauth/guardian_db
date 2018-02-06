@@ -2,8 +2,6 @@ defmodule Guardian.DB.Test do
   use Guardian.DB.Test.DataCase
   alias Guardian.DB.Token
 
-  require IEx
-
   setup do
     {:ok, %{
       claims: %{
@@ -66,7 +64,6 @@ defmodule Guardian.DB.Test do
     Guardian.DB.after_encode_and_sign(%{}, "token", new_claims, "The JWT 2")
     new_stuff = {get_token("token-uuid1"), new_claims}
 
-    IEx.pry
     assert Guardian.DB.on_refresh(old_stuff, new_stuff) == {:ok, old_stuff, new_stuff}
   end
 
