@@ -2,6 +2,8 @@ defmodule Guardian.DB.Test do
   use Guardian.DB.Test.DataCase
   alias Guardian.DB.Token
 
+  require IEx
+
   setup do
     {:ok, %{
       claims: %{
@@ -44,6 +46,28 @@ defmodule Guardian.DB.Test do
     token = get_token()
     assert token == nil
     assert {:error, :token_not_found} == Guardian.DB.on_verify(context.claims, "The JWT")
+  end
+
+  test "on_refresh without a record in the db", context do
+    token = get_token()
+    assert token == nil
+
+    Guardian.DB.after_encode_and_sign(%{}, "token", context.claims, "The JWT 1")
+    old_stuff = {get_token(), context.claims}
+
+    new_claims = %{
+      "jti" => "token-uuid1",
+      "typ" => "token",
+      "aud" => "token",
+      "sub" => "the_subject",
+      "iss" => "the_issuer",
+      "exp" => Guardian.timestamp() + 2_000_000_000
+    }
+    Guardian.DB.after_encode_and_sign(%{}, "token", new_claims, "The JWT 2")
+    new_stuff = {get_token("token-uuid1"), new_claims}
+
+    IEx.pry
+    assert Guardian.DB.on_refresh(old_stuff, new_stuff) == {:ok, old_stuff, new_stuff}
   end
 
   test "on_revoke without a record in the db", context do

@@ -53,6 +53,7 @@ You'll need to add it to:
 
 * `after_encode_and_sign`
 * `on_verify`
+* `on_refresh`
 * `on_revoke`
 
 For example:
@@ -72,6 +73,12 @@ defmodule MyApp.AuthTokens do
   def on_verify(claims, token, _options) do
     with {:ok, _} <- Guardian.DB.on_verify(claims, token) do
       {:ok, claims}
+    end
+  end
+
+  def on_refresh({old_token, old_claims}, {new_token, new_claims}, _options) do
+    with {:ok, _} <- Guardian.DB.on_refresh({old_token, old_claims}, {new_token, new_claims}) do
+      {:ok, {old_token, old_claims}, {new_token, new_claims}}}
     end
   end
 

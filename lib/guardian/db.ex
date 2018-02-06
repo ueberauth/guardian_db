@@ -156,6 +156,17 @@ defmodule Guardian.DB do
   end
 
   @doc """
+  When a token is refreshed, we invalidate the old token and add the new token
+  in the DB.
+  """
+  def on_refresh({old_token, old_claims}, {new_token, new_claims}) do
+    on_revoke(old_claims, old_token)
+    after_encode_and_sign(%{}, new_claims["typ"], new_claims, new_token)
+
+    {:ok, {old_token, old_claims}, {new_token, new_claims}}
+  end
+
+  @doc """
   When logging out, or revoking a token, removes from the database so the token may no longer be used
   """
   def on_revoke(claims, jwt) do
