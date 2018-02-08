@@ -78,7 +78,7 @@ defmodule MyApp.AuthTokens do
 
   def on_refresh({old_token, old_claims}, {new_token, new_claims}, _options) do
     with {:ok, _} <- Guardian.DB.on_refresh({old_token, old_claims}, {new_token, new_claims}) do
-      {:ok, {old_token, old_claims}, {new_token, new_claims}}}
+      {:ok, {old_token, old_claims}, {new_token, new_claims}}
     end
   end
 
