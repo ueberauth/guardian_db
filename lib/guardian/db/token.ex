@@ -31,7 +31,12 @@ defmodule Guardian.DB.Token do
     jti = Map.get(claims, "jti")
     aud = Map.get(claims, "aud")
 
-    Guardian.DB.repo().get_by(query_schema(), jti: jti, aud: aud)
+    query =
+      query_schema()
+      |> where([token], token.jti == ^jti and token.aud == ^aud)
+      |> Map.put(:prefix, prefix())
+
+    Guardian.DB.repo().one(query)
   end
 
   @doc """
@@ -45,6 +50,7 @@ defmodule Guardian.DB.Token do
 
     %Token{}
     |> Ecto.put_meta(source: schema_name())
+    |> Ecto.put_meta(prefix: prefix())
     |> cast(prepared_claims, @allowed_fields)
     |> Guardian.DB.repo().insert()
   end
@@ -57,7 +63,7 @@ defmodule Guardian.DB.Token do
 
     query_schema()
     |> where([token], token.exp < ^timestamp)
-    |> Guardian.DB.repo().delete_all()
+    |> Guardian.DB.repo().delete_all(prefix: prefix())
   end
 
   @doc false
@@ -70,5 +76,11 @@ defmodule Guardian.DB.Token do
     :guardian
     |> Application.fetch_env!(Guardian.DB)
     |> Keyword.get(:schema_name, "guardian_tokens")
+  end
+
+  defp prefix do
+    :guardian
+    |> Application.fetch_env!(Guardian.DB)
+    |> Keyword.get(:prefix, nil)
   end
 end
