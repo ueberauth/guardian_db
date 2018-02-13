@@ -78,7 +78,8 @@ defmodule Guardian.DB.Token do
     |> Keyword.get(:schema_name, "guardian_tokens")
   end
 
-  defp prefix do
+  @doc false
+  def prefix do
     :guardian
     |> Application.fetch_env!(Guardian.DB)
     |> Keyword.get(:prefix, nil)
