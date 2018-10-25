@@ -18,7 +18,7 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
 
     Enum.each(repos, fn repo ->
       ensure_repo(repo, args)
-      path = migrations_path(repo)
+      path = _migrations_path(repo)
 
       source_path =
         :guardian_db
@@ -32,6 +32,16 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
       create_directory(path)
       create_file(target_file, generated_file)
     end)
+  end
+
+  if Code.ensure_loaded?(Ecto.Migrator) && function_exported?(Ecto.Migrator, :migrations_path, 1) do
+    defp _migrations_path(repo) do
+      Ecto.Migrator.migrations_path(repo)
+    end
+  else
+    defp _migrations_path(repo) do
+      Mix.Ecto.migrations_path(repo)
+    end
   end
 
   defp app_module do

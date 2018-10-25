@@ -18,7 +18,8 @@ defmodule Guardian.DB.Mixfile do
       start_permanent: Mix.env() == :prod,
       preferred_cli_env: [guardian_db: :test],
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      lockfile: lockfile()
     ]
   end
 
@@ -30,13 +31,34 @@ defmodule Guardian.DB.Mixfile do
   defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [
+    deps = [
       {:guardian, "~> 1.0"},
-      {:ecto, "~> 2.2"},
-      {:postgrex, "~> 0.13", optional: true},
       {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false}
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:jason, "~> 1.1", optional: true}
     ]
+
+    if System.get_env("ECTO3") do
+      deps ++ [
+        {:ecto, "~> 3.0.0-rc.1"},
+        {:ecto_sql, "~> 3.0.0-rc.0"},
+        {:postgrex, "~> 0.14.0-rc.1", optional: true},
+        {:db_connection, "~> 2.0.0-rc.0", optional: true}
+      ]
+    else
+      deps ++ [
+        {:ecto, ">= 2.2.6"},
+        {:postgrex, ">= 0.13.0", optional: true}
+      ]
+    end
+  end
+
+  defp lockfile do
+    if System.get_env("ECTO3") do
+      "mix-ecto3.lock"
+    else
+      "mix.lock"
+    end
   end
 
   defp package do
