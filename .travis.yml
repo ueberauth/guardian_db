@@ -12,14 +12,19 @@ elixir:
 
 otp_release:
   - 20.3
-  - 21.0
 
 env:
   global:
     - MIX_ENV=test
-  matrix:
-    - ECTO2=1
-    - ECTO3=1
+
+
+matrix:
+  include:
+    - elixir: '1.7.3'
+      otp_release: '21.0'
+      env: ECTO3=1
+    - elixir: '1.6'
+      otp_release: '20.3'
 
 notifications:
   email: false
