@@ -199,6 +199,7 @@ defmodule Guardian.DB do
 
   defp storable_type?(type), do: storable_type?(type, token_types())
 
-  defp storable_type?(_, []), do: true  # store all types by default
+  # store all types by default
+  defp storable_type?(_, []), do: true
   defp storable_type?(type, types), do: type in types
 end

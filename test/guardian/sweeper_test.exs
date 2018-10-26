@@ -5,8 +5,15 @@ defmodule Guardian.DB.Test.SweeperTest do
   alias Guardian.DB.Token.Sweeper
 
   test "purge stale tokens" do
-    Token.create(%{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000}, "Token 1")
-    Token.create(%{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000}, "Token 2")
+    Token.create(
+      %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000},
+      "Token 1"
+    )
+
+    Token.create(
+      %{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000},
+      "Token 2"
+    )
 
     interval = 0
     state = %{interval: interval}

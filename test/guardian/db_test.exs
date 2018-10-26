@@ -3,16 +3,17 @@ defmodule Guardian.DB.Test do
   alias Guardian.DB.Token
 
   setup do
-    {:ok, %{
-      claims: %{
-        "jti" => "token-uuid",
-        "typ" => "token",
-        "aud" => "token",
-        "sub" => "the_subject",
-        "iss" => "the_issuer",
-        "exp" => Guardian.timestamp() + 1_000_000_000
-      }
-    }}
+    {:ok,
+     %{
+       claims: %{
+         "jti" => "token-uuid",
+         "typ" => "token",
+         "aud" => "token",
+         "sub" => "the_subject",
+         "iss" => "the_issuer",
+         "exp" => Guardian.timestamp() + 1_000_000_000
+       }
+     }}
   end
 
   test "after_encode_and_sign_in is successful", context do
@@ -61,6 +62,7 @@ defmodule Guardian.DB.Test do
       "iss" => "the_issuer",
       "exp" => Guardian.timestamp() + 2_000_000_000
     }
+
     Guardian.DB.after_encode_and_sign(%{}, "token", new_claims, "The JWT 2")
     new_stuff = {get_token("token-uuid1"), new_claims}
 
@@ -86,8 +88,15 @@ defmodule Guardian.DB.Test do
   end
 
   test "purge stale tokens" do
-    Token.create(%{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000}, "Token 1")
-    Token.create(%{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000}, "Token 2")
+    Token.create(
+      %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000},
+      "Token 1"
+    )
+
+    Token.create(
+      %{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000},
+      "Token 2"
+    )
 
     Token.purge_expired_tokens()
 
