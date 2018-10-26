@@ -16,9 +16,13 @@ defmodule Guardian.DB.Mixfile do
       docs: docs(),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
-      preferred_cli_env: [guardian_db: :test],
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -34,8 +38,13 @@ defmodule Guardian.DB.Mixfile do
       {:guardian, "~> 1.0"},
       {:ecto, "~> 2.2"},
       {:postgrex, "~> 0.13", optional: true},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false}
+
+      # Tools
+      {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:excoveralls, ">= 0.0.0", only: [:test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
+      {:inch_ex, ">= 0.0.0", only: [:dev], runtime: false}
     ]
   end
 
@@ -66,6 +75,14 @@ defmodule Guardian.DB.Mixfile do
   end
 
   defp aliases do
-    [test: ["ecto.drop --quiet", "ecto.create --quiet", "guardian.db.gen.migration", "ecto.migrate", "test"]]
+    [
+      test: [
+        "ecto.drop --quiet",
+        "ecto.create --quiet",
+        "guardian.db.gen.migration",
+        "ecto.migrate",
+        "test"
+      ]
+    ]
   end
 end

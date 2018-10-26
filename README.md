@@ -1,5 +1,8 @@
-Guardian.DB
-==========
+# Guardian.DB
+
+[![Build Status](https://travis-ci.org/ueberauth/guardian_db.svg?branch=master)](https://travis-ci.org/ueberauth/guardian_db)
+[![Codecov](https://codecov.io/gh/ueberauth/guardian_db/branch/master/graph/badge.svg)](https://codecov.io/gh/ueberauth/guardian_db)
+[![Inline docs](http://inch-ci.org/github/ueberauth/guardian_db.svg)](http://inch-ci.org/github/ueberauth/guardian_db)
 
 Guardian.DB is an extension to vanilla Guardian that tracks tokens in your
 application's database to prevent playback.

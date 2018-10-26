@@ -25,9 +25,12 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
         |> Application.app_dir()
         |> Path.join("priv/templates/migration.exs.eex")
 
-      generated_file = EEx.eval_file(source_path,
-                                     module_prefix: app_module(),
-                                     db_prefix: Token.prefix())
+      generated_file =
+        EEx.eval_file(source_path,
+          module_prefix: app_module(),
+          db_prefix: Token.prefix()
+        )
+
       target_file = Path.join(path, "#{timestamp()}_guardiandb.exs")
       create_directory(path)
       create_file(target_file, generated_file)
