@@ -5,3 +5,5 @@ erl_crash.dump
 doc/*
 .DS_Store
 /priv/temp
+/docs
+/cover
