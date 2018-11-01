@@ -1,7 +1,7 @@
 defmodule Guardian.DB.Mixfile do
   use Mix.Project
 
-  @version "1.1.1"
+  @version "2.0.0"
   @source_url "https://github.com/ueberauth/guardian_db"
 
   def project do
