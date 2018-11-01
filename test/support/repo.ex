@@ -1,5 +1,7 @@
 defmodule Guardian.DB.Test.Repo do
-  use Ecto.Repo, otp_app: :guardian_db
+  use Ecto.Repo,
+    otp_app: :guardian_db,
+    adapter: Ecto.Adapters.Postgres
 
   def log(_cmd), do: nil
 end
