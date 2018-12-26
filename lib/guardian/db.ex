@@ -108,12 +108,6 @@ defmodule Guardian.DB do
 
   alias Guardian.DB.Token
 
-  config = Application.get_env(:guardian, Guardian.DB, [])
-  @repo Keyword.get(config, :repo)
-
-  if config == [], do: raise("Guardian.DB configuration is required")
-  if is_nil(@repo), do: raise("Guardian.DB requires a repo")
-
   @doc """
   After the JWT is generated, stores the various fields of it in the DB for tracking.
   If the token type does not match the configured types to be stored, the claims are
