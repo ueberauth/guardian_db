@@ -3,7 +3,7 @@ sudo: false
 notifications:
   email: false
 
-elixir:w
+elixir:
   - 1.7
 
 otp_release:
