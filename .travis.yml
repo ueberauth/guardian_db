@@ -2,16 +2,22 @@ language: elixir
 sudo: false
 notifications:
   email: false
-addons:
-  postgresql: "9.4"
-services:
-  - postgresql
 
 elixir:
   - 1.7
 
 otp_release:
   - 21.1
+
+addons:
+  postgresql: "9.4"
+services:
+  - postgresql
+
+cache:
+  directories:
+    - _build
+    - deps
 
 script:
   - make testing
