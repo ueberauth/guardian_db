@@ -19,7 +19,7 @@ To install Guardian.DB, first add it to your `mix.exs` file:
 ```elixir
 defp deps do
   [
-    {:guardian_db, "~> 1.0"}
+    {:guardian_db, "~> 2.0"}
   ]
 end
 ```
