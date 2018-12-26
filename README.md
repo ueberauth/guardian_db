@@ -1,29 +1,27 @@
 # Guardian.DB
 
+[![Hex.pm](https://img.shields.io/hexpm/v/guardian_db.svg)](https://hex.pm/packages/guardian_db)
 [![Build Status](https://travis-ci.org/ueberauth/guardian_db.svg?branch=master)](https://travis-ci.org/ueberauth/guardian_db)
 [![Codecov](https://codecov.io/gh/ueberauth/guardian_db/branch/master/graph/badge.svg)](https://codecov.io/gh/ueberauth/guardian_db)
-[![Inline docs](http://inch-ci.org/github/ueberauth/guardian_db.svg)](http://inch-ci.org/github/ueberauth/guardian_db)
+[![Inline docs](https://inch-ci.org/github/ueberauth/guardian_db.svg)](https://inch-ci.org/github/ueberauth/guardian_db)
 
 Guardian.DB is an extension to vanilla Guardian that tracks tokens in your
 application's database to prevent playback.
 
 Support for `Guardian` 0.14.x is via the 0.8 release.
 
-Installation
-==========
+## Installation
 
 Guardian.DB assumes that you are using the Guardian framework for authentication.
 
 To install Guardian.DB, first add it to your `mix.exs` file:
 
 ```elixir
-    defp deps do
-      [
-      # ...
-      {:guardian_db, "~> 1.0"}
-      # ...
-      ]
-    end
+defp deps do
+  [
+    {:guardian_db, "~> 1.0"}
+  ]
+end
 ```
 
 Then run `mix deps.get` on your terminal.
@@ -34,7 +32,7 @@ run `mix guardian.db.gen.migration` to generate a migration.
 
 **Do not run the migration yet,** we need to complete our setup first.
 
-# Configuration
+## Configuration
 
 ```elixir
   config :guardian, Guardian.DB,
@@ -95,8 +93,7 @@ end
 
 Now run the migration and you'll be good to go.
 
-Considerations
-==========
+### Considerations
 
 Vanilla Guardian is already a very robust JWT solution. However, if your application needs the ability to immediately revoke and invalidate tokens that have already been generated, you need something like Guardian.DB to build upon Guardian.
 
