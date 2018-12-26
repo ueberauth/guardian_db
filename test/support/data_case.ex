@@ -1,4 +1,6 @@
 defmodule Guardian.DB.Test.DataCase do
+  @moduledoc false
+
   use ExUnit.CaseTemplate
   alias Guardian.DB.Test.Repo
   alias Guardian.DB.Token
