@@ -1,4 +1,4 @@
-defmodule <%= module_prefix %>.Repo.Migrations.Guardian.DB do
+defmodule <%= module_prefix %>.Repo.Migrations.CreateGuardianDBTokensTable do
   use Ecto.Migration
 
   def change do
