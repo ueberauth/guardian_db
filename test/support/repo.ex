@@ -1,4 +1,4 @@
-defmodule Guardian.DB.Test.Repo do
+defmodule Guardian.DB.TestSupport.Repo do
   @moduledoc false
 
   use Ecto.Repo,

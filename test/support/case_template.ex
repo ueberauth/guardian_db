@@ -2,14 +2,14 @@ defmodule Guardian.DB.Test.CaseTemplate do
   @moduledoc false
 
   use ExUnit.CaseTemplate
-  alias Guardian.DB.Test.Repo
+  alias Guardian.DB.TestSupport.Repo
   alias Guardian.DB.Token
   import Guardian.DB.Test.Support.FileHelpers
 
   using _opts do
     quote do
       import Guardian.DB.Test.CaseTemplate
-      alias Guardian.DB.Test.Repo
+      alias Guardian.DB.TestSupport.Repo
     end
   end
 
