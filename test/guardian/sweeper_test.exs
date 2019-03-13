@@ -1,5 +1,5 @@
 defmodule Guardian.DB.Test.SweeperTest do
-  use Guardian.DB.Test.DataCase
+  use Guardian.DB.Test.CaseTemplate
 
   alias Guardian.DB.Token
   alias Guardian.DB.Token.Sweeper
