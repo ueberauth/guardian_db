@@ -1,4 +1,4 @@
-defmodule Guardian.DB.Test.CaseTemplate do
+defmodule Guardian.DB.TestSupport.CaseTemplate do
   @moduledoc false
 
   use ExUnit.CaseTemplate
@@ -8,7 +8,7 @@ defmodule Guardian.DB.Test.CaseTemplate do
 
   using _opts do
     quote do
-      import Guardian.DB.Test.CaseTemplate
+      import Guardian.DB.TestSupport.CaseTemplate
       alias Guardian.DB.TestSupport.Repo
     end
   end
