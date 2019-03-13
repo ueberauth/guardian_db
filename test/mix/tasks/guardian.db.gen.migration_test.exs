@@ -1,7 +1,7 @@
 defmodule Mix.Tasks.Guardian.Db.Gen.MigrationTest do
   use ExUnit.Case, async: true
   import Mix.Tasks.Guardian.Db.Gen.Migration, only: [run: 1]
-  import Guardian.DB.Test.Support.FileHelpers
+  import Guardian.DB.TestSupport.FileHelpers
 
   @tmp_path Path.join(tmp_path(), inspect(Guardian.Db.Gen.Migration))
   @migrations_path Path.join(@tmp_path, "migrations")

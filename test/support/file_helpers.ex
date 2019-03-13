@@ -1,4 +1,4 @@
-defmodule Guardian.DB.Test.Support.FileHelpers do
+defmodule Guardian.DB.TestSupport.FileHelpers do
   @moduledoc false
 
   def tmp_path do

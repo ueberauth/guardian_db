@@ -4,7 +4,7 @@ defmodule Guardian.DB.Test.CaseTemplate do
   use ExUnit.CaseTemplate
   alias Guardian.DB.TestSupport.Repo
   alias Guardian.DB.Token
-  import Guardian.DB.Test.Support.FileHelpers
+  import Guardian.DB.TestSupport.FileHelpers
 
   using _opts do
     quote do
