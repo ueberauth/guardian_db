@@ -1,4 +1,4 @@
-defmodule Guardian.DB.Test do
+defmodule Guardian.DBTest do
   use Guardian.DB.TestSupport.CaseTemplate
   alias Guardian.DB.Token
 

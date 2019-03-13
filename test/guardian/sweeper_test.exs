@@ -1,4 +1,4 @@
-defmodule Guardian.DB.Test.SweeperTest do
+defmodule Guardian.DB.Token.SweeperTest do
   use Guardian.DB.TestSupport.CaseTemplate
 
   alias Guardian.DB.Token
