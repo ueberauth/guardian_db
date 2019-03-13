@@ -17,7 +17,7 @@ defmodule Guardian.DB.Test.SweeperTest do
 
     interval = 0
     state = %{interval: interval}
-    new_state = Sweeper.sweep(self(), state)
+    new_state = Sweeper.sweep(state)
 
     token1 = get_token("token1")
     token2 = get_token("token2")

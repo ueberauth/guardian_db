@@ -8,20 +8,20 @@ defmodule Guardian.DB.Token.Sweeper do
   @doc """
   Purges the expired tokens and schedule the next purge.
   """
-  def sweep(pid, state) do
+  def sweep(state) do
     Token.purge_expired_tokens()
-    schedule_work(pid, state)
+    schedule_work(state)
   end
 
   @doc """
   Schedule the next purge.
   """
-  def schedule_work(pid, state) do
+  def schedule_work(state) do
     if state[:timer] do
       Process.cancel_timer(state.timer)
     end
 
-    timer = Process.send_after(pid, :sweep, state[:interval])
+    timer = Process.send_after(self(), :sweep, state[:interval])
     Map.merge(state, %{timer: timer})
   end
 

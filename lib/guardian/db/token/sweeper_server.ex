@@ -39,19 +39,19 @@ defmodule Guardian.DB.Token.SweeperServer do
   end
 
   def init(state) do
-    {:ok, Sweeper.schedule_work(self(), state)}
+    {:ok, Sweeper.schedule_work(state)}
   end
 
   def handle_call(:reset_timer, _from, state) do
-    {:reply, :ok, Sweeper.schedule_work(self(), state)}
+    {:reply, :ok, Sweeper.schedule_work(state)}
   end
 
   def handle_call(:sweep, _from, state) do
-    {:reply, :ok, Sweeper.sweep(self(), state)}
+    {:reply, :ok, Sweeper.sweep(state)}
   end
 
   def handle_info(:sweep, state) do
-    {:noreply, Sweeper.sweep(self(), state)}
+    {:noreply, Sweeper.sweep(state)}
   end
 
   def handle_info(_, state), do: {:noreply, state}
