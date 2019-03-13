@@ -104,7 +104,7 @@ have already been generated, you need something like `Guardian.DB` to build upon
 `Guardian`.
 
 In `Guardian`, you as a systems administrator have no way of revoking
-tokens that have already been generated, you can call `Guardian.revoke!`, but in
+tokens that have already been generated, you can call `Guardian.revoke`, but in
 `Guardian` **that function does not actually do anything** - it just provides
 hooks for other libraries, such as this one, to define more specific behavior.
 Discarding the token after something like a log out action is left up to the
