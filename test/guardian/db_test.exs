@@ -91,7 +91,11 @@ defmodule Guardian.DB.Test do
     Token.create(context.claims, "The JWT")
 
     assert Guardian.DB.on_revoke(context.claims, "The JWT") == {:ok, {context.claims, "The JWT"}}
-    assert Guardian.DB.on_revoke(context.claims, "The JWT") == {:error, _changeset}
+
+    token = get_token()
+    assert token == nil
+
+    {:error, :could_not_revoke_token} = Guardian.DB.on_revoke(context.claims, "The JWT")
   end
 
   test "purge stale tokens" do
