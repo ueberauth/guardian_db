@@ -45,7 +45,8 @@ run `mix guardian.db.gen.migration` to generate a migration.
 To sweep expired tokens from your db you should add `Guardian.DB.Token.SweeperServer` to your supervision tree.
 
 ```elixir
-  %{start: {Guardian.DB.Token.SweeperServer, []}}
+  %{id: :guardian_db_token_sweeper, 
+      start: {Guardian.DB.Token.SweeperServer, :start_link, []}}
 ```
 
 `Guardian.DB` works by hooking into the lifecycle of your token module.
