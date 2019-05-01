@@ -172,7 +172,7 @@ defmodule Guardian.DB do
   defp destroy_token(nil, claims, jwt), do: {:ok, {claims, jwt}}
 
   defp destroy_token(model, claims, jwt) do
-    case repo().delete(model) do
+    case repo().delete(model, stale_error_field: :stale_token) do
       {:error, _} -> {:error, :could_not_revoke_token}
       nil -> {:error, :could_not_revoke_token}
       _ -> {:ok, {claims, jwt}}
