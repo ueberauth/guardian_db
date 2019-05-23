@@ -1,5 +1,5 @@
-defmodule Guardian.DB.Test do
-  use Guardian.DB.Test.DataCase
+defmodule Guardian.DBTest do
+  use Guardian.DB.TestSupport.CaseTemplate
   alias Guardian.DB.Token
 
   setup do

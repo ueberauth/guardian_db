@@ -1,5 +1,5 @@
-defmodule Guardian.DB.Test.SweeperTest do
-  use Guardian.DB.Test.DataCase
+defmodule Guardian.DB.Token.SweeperTest do
+  use Guardian.DB.TestSupport.CaseTemplate
 
   alias Guardian.DB.Token
   alias Guardian.DB.Token.Sweeper
@@ -17,7 +17,7 @@ defmodule Guardian.DB.Test.SweeperTest do
 
     interval = 0
     state = %{interval: interval}
-    new_state = Sweeper.sweep(self(), state)
+    new_state = Sweeper.sweep(state)
 
     token1 = get_token("token1")
     token2 = get_token("token2")

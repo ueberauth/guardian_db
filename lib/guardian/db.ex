@@ -1,18 +1,23 @@
 defmodule Guardian.DB do
   @moduledoc """
-  Guardian.DB is a simple module that hooks into guardian to prevent playback of tokens.
+  `Guardian.DB` is a simple module that hooks into `Guardian` to prevent
+  playback of tokens.
 
-  In vanilla Guardian, tokens aren't tracked so the main mechanism
-  that exists to make a token inactive is to set the expiry and wait until it arrives.
+  In `Guardian`, tokens aren't tracked so the main mechanism that exists to
+  make a token inactive is to set the expiry and wait until it arrives.
 
-  Guardian.DB takes an active role and stores each token in the database verifying it's presense
-  (based on it's jti) when Guardian verifies the token.
-  If the token is not present in the DB, the Guardian token cannot be verified.
+  `Guardian.DB` takes an active role and stores each token in the database
+  verifying it's presense (based on it's jti) when `Guardian` verifies the
+  token.
+  If the token is not present in the DB, the `Guardian` token cannot be
+  verified.
 
-  Provides a simple database storage and check for Guardian tokens.
+  Provides a simple database storage and check for `Guardian` tokens.
 
   - When generating a token, the token is stored in a database.
-  - When tokens are verified (channel, session or header) the database is checked for an entry that matches. If none is found, verification results in an error.
+  - When tokens are verified (channel, session or header) the database is
+  checked for an entry that matches. If none is found, verification results in
+  an error.
   - When logout, or revoking the token, the corresponding entry is removed
 
   # Setup
@@ -25,14 +30,15 @@ defmodule Guardian.DB do
 
   You may also configure
 
-  * `prefix` - The schema prefix to use
-  * `schema_name` - The name of the schema to use. Default "guardian_tokens"
-  * `sweep_interval` - The interval between db sweeps to remove old tokens. Default 60 (mins)
+  * `prefix` - The schema prefix to use.
+  * `schema_name` - The name of the schema to use. Default "guardian_tokens".
+  * `sweep_interval` - The interval between db sweeps to remove old tokens.
+  Default 60 (mins).
 
   ### Sweeper
 
-  In order to sweep your expired tokens from the db, you'll need to add `Guardian.DB.Token.SweeperServer`
-  to your supervision tree.
+  In order to sweep your expired tokens from the db, you'll need to add
+  `Guardian.DB.Token.SweeperServer` to your supervision tree.
   In your supervisor add it as a worker
 
   ```elixir
@@ -41,7 +47,8 @@ defmodule Guardian.DB do
 
   # Migration
 
-  Guardian.DB requires a table in your database. Create a migration like the following:
+  `Guardian.DB` requires a table in your database. Create a migration like the
+  following:
 
   ```elixir
     create table(:guardian_tokens, primary_key: false) do
@@ -57,9 +64,7 @@ defmodule Guardian.DB do
     end
   ```
 
-  # Setup (Guardian >= 1.0)
-
-  Guardian.DB works by hooking into the lifecycle of your token module.
+  `Guardian.DB` works by hooking into the lifecycle of your token module.
 
   You'll need to add it to
 
@@ -94,24 +99,14 @@ defmodule Guardian.DB do
     end
   end
   ```
-
-  # Setup (Guardian < 1.0)
-
-  To use `Guardian.DB` with Guardian less than version 1.0, add Guardian.DB as your
-  hooks module. In the Guardian configuration:
-
-  ```elixir
-  config :guardian, Guardian,
-    hooks: Guardian.DB
-  ```
   """
 
   alias Guardian.DB.Token
 
   @doc """
-  After the JWT is generated, stores the various fields of it in the DB for tracking.
-  If the token type does not match the configured types to be stored, the claims are
-  passed through.
+  After the JWT is generated, stores the various fields of it in the DB for
+  tracking. If the token type does not match the configured types to be stored,
+  the claims are passed through.
   """
   def after_encode_and_sign(resource, type, claims, jwt) do
     case store_token(type, claims, jwt) do
@@ -130,7 +125,8 @@ defmodule Guardian.DB do
 
   @doc """
   When a token is verified, check to make sure that it is present in the DB.
-  If the token is found, the verification continues, if not an error is returned.
+  If the token is found, the verification continues, if not an error is
+  returned.
   If the type of the token does not match the configured token storage types,
   the claims are passed through.
   """
@@ -161,31 +157,23 @@ defmodule Guardian.DB do
   end
 
   @doc """
-  When logging out, or revoking a token, removes from the database so the token may no longer be used
+  When logging out, or revoking a token, removes from the database so the
+  token may no longer be used.
   """
   def on_revoke(claims, jwt) do
     claims
     |> Token.find_by_claims()
-    |> destroy_token(claims, jwt)
+    |> Token.destroy_token(claims, jwt)
   end
 
-  defp destroy_token(nil, claims, jwt), do: {:ok, {claims, jwt}}
-
-  defp destroy_token(model, claims, jwt) do
-    case repo().delete(model, stale_error_field: :stale_token) do
-      {:error, _} -> {:error, :could_not_revoke_token}
-      nil -> {:error, :could_not_revoke_token}
-      _ -> {:ok, {claims, jwt}}
-    end
-  end
-
+  @doc false
   def repo do
     :guardian
     |> Application.fetch_env!(Guardian.DB)
     |> Keyword.fetch!(:repo)
   end
 
-  defp token_types() do
+  defp token_types do
     :guardian
     |> Application.fetch_env!(Guardian.DB)
     |> Keyword.get(:token_types, [])
@@ -193,7 +181,7 @@ defmodule Guardian.DB do
 
   defp storable_type?(type), do: storable_type?(type, token_types())
 
-  # store all types by default
+  # Store all types by default
   defp storable_type?(_, []), do: true
   defp storable_type?(type, types), do: type in types
 end

@@ -1,2 +1,2 @@
-{:ok, _pid} = Guardian.DB.Test.Repo.start_link()
+{:ok, _pid} = Guardian.DB.TestSupport.Repo.start_link()
 ExUnit.start()
