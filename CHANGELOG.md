@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.2
+
+* Fix deps range to include Guardian 2
+
 ## v0.8.0
 
 * Sweeper configuration now works in minutes
