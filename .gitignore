@@ -7,3 +7,5 @@ doc/*
 /priv/temp
 /docs
 /cover
+
+mix.lock
