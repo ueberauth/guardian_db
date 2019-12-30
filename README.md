@@ -48,7 +48,6 @@ To sweep expired tokens from your db you should add
 children = [
   {Guardian.DB.Token.SweeperServer, []}
 ]
-      start: {Guardian.DB.Token.SweeperServer, :start_link, []}}
 ```
 
 `Guardian.DB` works by hooking into the lifecycle of your `Guardian` module.
