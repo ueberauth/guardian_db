@@ -68,6 +68,15 @@ defmodule Guardian.DB.Token do
   end
 
   @doc false
+  def destroy_by_sub(sub) do
+    query = query_schema()
+    |> where([token], token.sub == ^sub)
+    |> Map.put(:prefix, prefix())
+
+    Guardian.DB.repo().delete_all(query)
+  end
+
+  @doc false
   def query_schema do
     {schema_name(), Token}
   end
