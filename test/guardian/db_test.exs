@@ -105,4 +105,26 @@ defmodule Guardian.DBTest do
     assert token1 != nil
     assert token2 == nil
   end
+
+  test "revoke_all deletes all tokens of a sub" do
+    sub = "the_subject"
+
+    Token.create(
+      %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp(), "sub" => sub},
+      "Token 1"
+    )
+
+    Token.create(
+      %{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp(), "sub" => sub},
+      "Token 2"
+    )
+
+    Token.create(
+      %{"jti" => "token3", "aud" => "token", "exp" => Guardian.timestamp(), "sub" => sub},
+      "Token 3"
+    )
+
+    assert Guardian.DB.revoke_all(sub) == {:ok, 3}
+    assert Repo.all(Token.query_schema()) == []
+  end
 end

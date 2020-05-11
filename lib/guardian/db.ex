@@ -166,6 +166,40 @@ defmodule Guardian.DB do
     |> Token.destroy_token(claims, jwt)
   end
 
+  @doc """
+  Revoke all tokens of a given subject. Returns the amount of tokens revoked.
+
+  ## Usage
+
+  Add to your `Guardian` module.
+
+  ```elixir
+  defmodule MyApp.AuthTokens do
+    use Guardian, otp_app: :my_app
+
+    # snip...
+
+    def revoke_all(resource, claims) do
+      with {:ok, sub} <- subject_for_token(resource, claims) do
+        Guardian.DB.revoke_all(resource)
+      end
+    end
+  end
+  ```
+
+  Then you revoke all tokens of a resource.
+
+  ```elixir
+  MyApp.AuthTokens.revoke_all(resource, %{})
+  ```
+
+  """
+  def revoke_all(sub) do
+    {amount_deleted, _} = Token.destroy_by_sub(sub)
+
+    {:ok, amount_deleted}
+  end
+
   @doc false
   def repo do
     :guardian
