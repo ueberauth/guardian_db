@@ -25,7 +25,9 @@ end
 
 Then run `mix deps.get` on your terminal.
 
-You will then need to add a migration:
+Configure your application as seen in the *Configuration* section below prior to attempting to generate the migration or you will get an `application was not loaded/started` error.
+
+Following configuration add the Guardian migration:
 
 run `mix guardian.db.gen.migration` to generate a migration.
 
