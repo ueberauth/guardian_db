@@ -110,7 +110,7 @@ defmodule Guardian.DB do
   """
   def after_encode_and_sign(resource, type, claims, jwt) do
     case store_token(type, claims, jwt) do
-      {:error, _} -> {:error, :token_storage_failure}
+      {:error, reason} -> {:error, :token_storage_failure, reason}
       _ -> {:ok, {resource, type, claims, jwt}}
     end
   end
