@@ -1,7 +1,7 @@
 # Guardian.DB
 
 [![Hex.pm](https://img.shields.io/hexpm/v/guardian_db.svg)](https://hex.pm/packages/guardian_db)
-[![Build Status](https://travis-ci.org/ueberauth/guardian_db.svg?branch=master)](https://travis-ci.org/ueberauth/guardian_db)
+![Build Status](https://github.com/ueberauth/guardian_db/workflows/Continuous%20Integration/badge.svg)
 [![Codecov](https://codecov.io/gh/ueberauth/guardian_db/branch/master/graph/badge.svg)](https://codecov.io/gh/ueberauth/guardian_db)
 [![Inline docs](https://inch-ci.org/github/ueberauth/guardian_db.svg)](https://inch-ci.org/github/ueberauth/guardian_db)
 
