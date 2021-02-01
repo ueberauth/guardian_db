@@ -10,6 +10,7 @@ defmodule Guardian.DB.Token do
   alias Guardian.DB.Token
 
   @primary_key {:jti, :string, autogenerate: false}
+  @required_fields ~w(jti aud)a
   @allowed_fields ~w(jti typ aud iss sub exp jwt claims)a
 
   schema "virtual: token" do
@@ -52,6 +53,7 @@ defmodule Guardian.DB.Token do
     |> Ecto.put_meta(source: schema_name())
     |> Ecto.put_meta(prefix: prefix())
     |> cast(prepared_claims, @allowed_fields)
+    |> validate_required(@required_fields)
     |> Guardian.DB.repo().insert()
   end
 
