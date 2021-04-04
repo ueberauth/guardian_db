@@ -3,6 +3,9 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
 
   @moduledoc """
   Generates the required GuardianDb's database migration.
+
+  It allows custom schema name, using the config
+  entry `schema_name`.
   """
   use Mix.Task
 
