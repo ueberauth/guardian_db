@@ -64,6 +64,31 @@ defmodule Guardian.DB do
     end
   ```
 
+  `Guardian.DB` allow to use a custom schema name when creating the migration.
+  You can configure the schema name from config like the following:
+
+  ```elixir
+  config :guardian, Guardian.DB,
+    schema_name: "my_customy_custom_schema
+  ```
+
+  And when you run `mix guardian.db.gen.migration` it'll generate the following
+  migration:
+
+  ```elixir
+    create table(:my_custom_schema, primary_key: false) do
+      add(:jti, :string, primary_key: true)
+      add(:typ, :string)
+      add(:aud, :string)
+      add(:iss, :string)
+      add(:sub, :string)
+      add(:exp, :bigint)
+      add(:jwt, :text)
+      add(:claims, :map)
+      timestamps()
+    end
+  ```
+
   `Guardian.DB` works by hooking into the lifecycle of your token module.
 
   You'll need to add it to

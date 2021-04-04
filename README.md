@@ -97,6 +97,34 @@ end
 
 Now run the migration and you'll be good to go.
 
+### Custom schema name
+
+`Guardian.DB` allows custom schema name in migrations, based on following
+configuration:
+
+```elixir
+config :guardian, Guardian.DB,
+  schema_name: "my_custom_schema"
+```
+
+And when you run the migration, it'll generate the following migration:
+
+```elixir
+  create table(:my_custom_schema, primary_key: false) do
+    add(:jti, :string, primary_key: true)
+    add(:typ, :string)
+    add(:aud, :string)
+    add(:iss, :string)
+    add(:sub, :string)
+    add(:exp, :bigint)
+    add(:jwt, :text)
+    add(:claims, :map)
+    timestamps()
+  end
+```
+
+Then, run the migration and you'll be good to go.
+
 ### Considerations
 
 `Guardian` is already a very robust JWT solution. However, if your

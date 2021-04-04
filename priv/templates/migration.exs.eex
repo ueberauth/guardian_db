@@ -2,7 +2,7 @@ defmodule <%= module_prefix %>.Repo.Migrations.CreateGuardianDBTokensTable do
   use Ecto.Migration
 
   def change do
-    create table(:guardian_tokens, primary_key: false<%= if not is_nil(db_prefix), do: ", prefix: \"#{db_prefix}\"" %>) do
+    create table(<%= inspect(schema_name) %>, primary_key: false<%= if not is_nil(db_prefix), do: ", prefix: \"#{db_prefix}\"" %>) do
       add(:jti, :string, primary_key: true)
       add(:aud, :string, primary_key: true)
       add(:typ, :string)
