@@ -32,12 +32,9 @@ defmodule Guardian.DB.Token do
     jti = Map.get(claims, "jti")
     aud = Map.get(claims, "aud")
 
-    query =
-      query_schema()
-      |> where([token], token.jti == ^jti and token.aud == ^aud)
-      |> Map.put(:prefix, prefix())
-
-    Guardian.DB.repo().one(query)
+    query_schema()
+    |> where([token], token.jti == ^jti and token.aud == ^aud)
+    |> Guardian.DB.repo().one(prefix: prefix())
   end
 
   @doc """
@@ -71,12 +68,9 @@ defmodule Guardian.DB.Token do
 
   @doc false
   def destroy_by_sub(sub) do
-    query =
-      query_schema()
-      |> where([token], token.sub == ^sub)
-      |> Map.put(:prefix, prefix())
-
-    Guardian.DB.repo().delete_all(query)
+    query_schema()
+    |> where([token], token.sub == ^sub)
+    |> Guardian.DB.repo().delete_all(prefix: prefix())
   end
 
   @doc false
