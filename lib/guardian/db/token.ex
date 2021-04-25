@@ -51,7 +51,7 @@ defmodule Guardian.DB.Token do
     |> Ecto.put_meta(prefix: prefix())
     |> cast(prepared_claims, @allowed_fields)
     |> validate_required(@required_fields)
-    |> Guardian.DB.repo().insert()
+    |> Guardian.DB.repo().insert(prefix: prefix())
   end
 
   @doc """
@@ -96,7 +96,7 @@ defmodule Guardian.DB.Token do
   def destroy_token(nil, claims, jwt), do: {:ok, {claims, jwt}}
 
   def destroy_token(model, claims, jwt) do
-    case Guardian.DB.repo().delete(model) do
+    case Guardian.DB.repo().delete(model, prefix: prefix()) do
       {:error, _} -> {:error, :could_not_revoke_token}
       nil -> {:error, :could_not_revoke_token}
       _ -> {:ok, {claims, jwt}}
