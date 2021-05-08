@@ -14,7 +14,6 @@ defmodule Guardian.DB.Adapter do
   @typep id :: pos_integer() | binary() | Ecto.UUID.t()
 
   @callback one(queryable()) :: nil | schema()
-  @callback get(queryable(), id()) :: nil | schema()
   @callback insert(schema_or_changeset()) :: {:ok, schema()}
   @callback delete(schema_or_changeset()) :: {:ok, schema()}
   @callback delete_all(queryable()) :: {:ok, pos_integer()}
