@@ -198,4 +198,4 @@ Apart from this you will need to configure [Redis connection for `guardian_redis
 ### Create your own Repo
 
 We created `Guardian.DB.Adapter` behaviour to allow creating other repositories for persisting JWT tokens. 
-You need to implement only 5 methods to make Guardian.DB working with your preferred storage.     
+You need to implement the `Guardian.DB.Adapter` behavior working with your preferred storage.     
