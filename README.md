@@ -171,31 +171,13 @@ In other words, once you have reached a point where you think you need
 `Guardian.DB`, it may be time to take a step back and reconsider your whole
 approach to authentication!
 
-### Guardian.DB Redis repo
-
-To improve situation described in "Disadvantages" section you can use Redis repo instead of Postgres repo.
-In order to do it you need add following configuration:
-
-Add to your mix.exs file new [`guardian_redis`](https://github.com/alexfilatov/guardian_redis) dependency:
-
-```elixir
-defp deps do
-  [
-    {:guardian_redis, "~> 0.1"}
-  ]
-end
-```
-
-Configure Redis repo in Guardian.DB configuration:
-
-```elixir
-config :guardian, Guardian.DB,
-  repo: GuardianRedis.Repo
-```
-
-Apart from this you will need to configure [Redis connection for `guardian_redis`](https://github.com/alexfilatov/guardian_redis#configuration) 
-
 ### Create your own Repo
 
 We created `Guardian.DB.Adapter` behaviour to allow creating other repositories for persisting JWT tokens. 
 You need to implement the `Guardian.DB.Adapter` behavior working with your preferred storage.     
+
+### Adapters
+
+1. Redis adapter - [`guardian_redis`](https://github.com/alexfilatov/guardian_redis)
+
+Feel free to create your adapters using `Guardian.DB.Adapter` behavior and you are welcome to add them here.
