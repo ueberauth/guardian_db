@@ -170,3 +170,14 @@ there isn't a good enough reason to reinvent that wheel using JWTs.
 In other words, once you have reached a point where you think you need
 `Guardian.DB`, it may be time to take a step back and reconsider your whole
 approach to authentication!
+
+### Create your own Repo
+
+We created `Guardian.DB.Adapter` behaviour to allow creating other repositories for persisting JWT tokens. 
+You need to implement the `Guardian.DB.Adapter` behavior working with your preferred storage.     
+
+### Adapters
+
+1. Redis adapter - [`guardian_redis`](https://github.com/alexfilatov/guardian_redis)
+
+Feel free to create your adapters using `Guardian.DB.Adapter` behavior and you are welcome to add them here.
