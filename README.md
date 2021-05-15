@@ -25,7 +25,9 @@ end
 
 Then run `mix deps.get` on your terminal.
 
-Configure your application as seen in the *Configuration* section below prior to attempting to generate the migration or you will get an `application was not loaded/started` error.
+Configure your application as seen in the *Configuration* section below prior to
+attempting to generate the migration or you will get an
+`application was not loaded/started` error.
 
 Following configuration add the Guardian migration:
 
@@ -173,11 +175,13 @@ approach to authentication!
 
 ### Create your own Repo
 
-We created `Guardian.DB.Adapter` behaviour to allow creating other repositories for persisting JWT tokens. 
-You need to implement the `Guardian.DB.Adapter` behavior working with your preferred storage.     
+We created `Guardian.DB.Repo` behaviors to allow creating other repositories
+for persisting JWT tokens. You need to implement the `Guardian.DB.Repo`
+behavior working with your preferred storage.
 
 ### Adapters
 
 1. Redis adapter - [`guardian_redis`](https://github.com/alexfilatov/guardian_redis)
 
-Feel free to create your adapters using `Guardian.DB.Adapter` behavior and you are welcome to add them here.
+Feel free to create your adapters using `Guardian.DB.Repo` behavior and you are
+welcome to add them here.

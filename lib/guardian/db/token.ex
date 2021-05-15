@@ -8,6 +8,7 @@ defmodule Guardian.DB.Token do
   import Ecto.Query, only: [where: 3]
 
   alias Guardian.DB.Token
+  alias Guardian.DB.Repo
 
   @primary_key {:jti, :string, autogenerate: false}
   @required_fields ~w(jti aud)a
@@ -34,7 +35,7 @@ defmodule Guardian.DB.Token do
 
     query_schema()
     |> where([token], token.jti == ^jti and token.aud == ^aud)
-    |> Guardian.DB.repo().one(prefix: prefix())
+    |> Repo.repo().one(prefix: prefix())
   end
 
   @doc """
@@ -51,7 +52,7 @@ defmodule Guardian.DB.Token do
     |> Ecto.put_meta(prefix: prefix())
     |> cast(prepared_claims, @allowed_fields)
     |> validate_required(@required_fields)
-    |> Guardian.DB.repo().insert(prefix: prefix())
+    |> Repo.repo().insert(prefix: prefix())
   end
 
   @doc """
@@ -63,14 +64,14 @@ defmodule Guardian.DB.Token do
 
     query_schema()
     |> where([token], token.exp < ^timestamp)
-    |> Guardian.DB.repo().delete_all(prefix: prefix())
+    |> Repo.repo().delete_all(prefix: prefix())
   end
 
   @doc false
   def destroy_by_sub(sub) do
     query_schema()
     |> where([token], token.sub == ^sub)
-    |> Guardian.DB.repo().delete_all(prefix: prefix())
+    |> Repo.repo().delete_all(prefix: prefix())
   end
 
   @doc false
@@ -96,7 +97,7 @@ defmodule Guardian.DB.Token do
   def destroy_token(nil, claims, jwt), do: {:ok, {claims, jwt}}
 
   def destroy_token(model, claims, jwt) do
-    case Guardian.DB.repo().delete(model, prefix: prefix()) do
+    case Repo.repo().delete(model, prefix: prefix()) do
       {:error, _} -> {:error, :could_not_revoke_token}
       nil -> {:error, :could_not_revoke_token}
       _ -> {:ok, {claims, jwt}}
