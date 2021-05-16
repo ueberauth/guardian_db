@@ -225,13 +225,6 @@ defmodule Guardian.DB do
     {:ok, amount_deleted}
   end
 
-  @doc false
-  def repo do
-    :guardian
-    |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.fetch!(:repo)
-  end
-
   defp token_types do
     :guardian
     |> Application.fetch_env!(Guardian.DB)
