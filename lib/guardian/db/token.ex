@@ -97,6 +97,6 @@ defmodule Guardian.DB.Token do
   defp adapter do
     :guardian
     |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.fetch!(:adapter)
+    |> Keyword.get(:adapter, Guardian.DB.EctoAdapter)
   end
 end
