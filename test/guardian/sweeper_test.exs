@@ -1,31 +1,46 @@
-defmodule Guardian.DB.Token.SweeperTest do
+defmodule Guardian.DB.SweeperTest do
   use Guardian.DB.TestSupport.CaseTemplate
 
   alias Guardian.DB.Token
-  alias Guardian.DB.Token.Sweeper
+  alias Guardian.DB.Sweeper
 
-  test "purge stale tokens" do
-    Token.create(
-      %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000},
-      "Token 1"
-    )
+  describe "purge/0" do
+    test "purges expired tokens" do
+      Token.create(
+        %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000},
+        "Token 1"
+      )
 
-    Token.create(
-      %{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000},
-      "Token 2"
-    )
+      Token.create(
+        %{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000},
+        "Token 2"
+      )
 
-    interval = 0
-    state = %{interval: interval}
-    new_state = Sweeper.sweep(state)
+      {:ok, pid} = Sweeper.start_link(interval: 1_000_000_000)
+      Sweeper.purge()
 
-    token1 = get_token("token1")
-    token2 = get_token("token2")
+      GenServer.stop(pid)
 
-    assert token1 != nil
-    assert token2 == nil
+      token1 = get_token("token1")
+      token2 = get_token("token2")
 
-    assert new_state[:timer] != nil
-    assert_receive :sweep, interval + 10
+      assert token1 != nil
+      assert token2 == nil
+    end
+  end
+
+  describe "reset_timer" do
+    test "cancels and restarts the existing timer" do
+      interval = 1_000_000_000
+      {:ok, pid} = Sweeper.start_link(interval: interval)
+
+      [interval: ^interval, timer: timer] = :sys.get_state(pid)
+
+      Sweeper.reset_timer()
+
+      [interval: _interval, timer: new_timer] = :sys.get_state(pid)
+
+      assert timer != new_timer
+    end
   end
 end
