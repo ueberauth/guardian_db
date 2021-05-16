@@ -5,7 +5,6 @@ defmodule Guardian.DB.Token do
 
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query, only: [where: 3]
 
   alias Guardian.DB.Token
 
@@ -33,10 +32,10 @@ defmodule Guardian.DB.Token do
   end
 
   @doc """
-  Create a new token based on the JWT and decoded claims.
+  Setup our Token changeset for the provided claims and JWT
   """
-  def create(claims, jwt) do
-    prepared_claims =
+  def changeset(claims, jwt) do
+    attrs =
       claims
       |> Map.put("jwt", jwt)
       |> Map.put("claims", claims)
@@ -44,9 +43,30 @@ defmodule Guardian.DB.Token do
     %Token{}
     |> Ecto.put_meta(source: schema_name())
     |> Ecto.put_meta(prefix: prefix())
-    |> cast(prepared_claims, @allowed_fields)
+    |> cast(attrs, @allowed_fields)
     |> validate_required(@required_fields)
+  end
+
+  @doc """
+  Create a new token based on the JWT and decoded claims.
+  """
+  def create(claims, jwt) do
+    claims
+    |> changeset(jwt)
     |> adapter().insert(prefix: prefix())
+  end
+
+  @doc """
+  """
+  def changeset(claims, jwt) do
+    attrs =
+      claims
+      |> Map.put("jwt", jwt)
+      |> Map.put("claims", claims)
+
+    %Token{}
+    |> cast(attrs, @allowed_fields)
+    |> validate_required(@required_fields)
   end
 
   @doc """
