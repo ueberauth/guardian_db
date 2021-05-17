@@ -42,13 +42,13 @@ defmodule Guardian.DB.Mixfile do
       {:postgrex, "~> 0.13", optional: true},
 
       # Tools
-      {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
+      {:dialyxir, ">= 0.0.0", only: :dev, runtime: false},
       {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
-      {:excoveralls, ">= 0.0.0", only: [:test], runtime: false},
-      {:temporary_env, ">= 0.0.0", only: [:test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
-      {:inch_ex, ">= 0.0.0", only: [:dev], runtime: false},
-      {:mox, ">= 0.0.0", only: [:dev], runtime: false}
+      {:excoveralls, ">= 0.0.0", only: :test, runtime: false},
+      {:temporary_env, ">= 0.0.0", only: :test, runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:inch_ex, ">= 0.0.0", only: :dev, runtime: false},
+      {:mox, ">= 0.0.0", only: :test}
     ]
   end
 
