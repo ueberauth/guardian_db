@@ -1,8 +1,7 @@
 defmodule Guardian.DBFailTest do
-  alias Guardian.DB.Token
   use Guardian.DB.TestSupport.CaseTemplate
 
-  test "after_encode_and_sign_in is fails", context do
+  test "after_encode_and_sign_in is fails" do
     token = get_token()
     assert token == nil
 

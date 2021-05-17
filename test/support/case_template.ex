@@ -24,5 +24,12 @@ defmodule Guardian.DB.TestSupport.CaseTemplate do
     :ok
   end
 
-  def get_token(token_id \\ "token-uuid"), do: Repo.get(Token.query_schema(), token_id)
+  def get_token(token_id \\ "token-uuid") do
+    schema_name =
+      :guardian
+      |> Application.fetch_env!(Guardian.DB)
+      |> Keyword.get(:schema_name, "guardian_tokens")
+
+    Repo.get({schema_name, Token}, token_id)
+  end
 end
