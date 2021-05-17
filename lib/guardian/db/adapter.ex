@@ -12,9 +12,14 @@ defmodule Guardian.DB.Adapter do
   @typep schema_or_changeset :: schema() | changeset()
   @typep claims :: map()
   @typep exp :: pos_integer()
-  @typep sub :: string()
+  @typep sub :: binary()
   @typep opts :: keyword()
   @typep id :: pos_integer() | binary() | Ecto.UUID.t()
+
+  @doc """
+  Optional callback for creating a changeset
+  """
+  @callback changeset(map(), opts()) :: changeset()
 
   @doc """
   Retrieves JWT token

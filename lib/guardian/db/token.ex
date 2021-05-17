@@ -29,7 +29,7 @@ defmodule Guardian.DB.Token do
   Find one token by matching jti and aud.
   """
   def find_by_claims(claims) do
-    adapter().one(claims, prefix: prefix())
+    adapter().one(claims, config())
   end
 
   @doc """
@@ -42,11 +42,9 @@ defmodule Guardian.DB.Token do
       |> Map.put("claims", claims)
 
     %Token{}
-    |> Ecto.put_meta(source: schema_name())
-    |> Ecto.put_meta(prefix: prefix())
     |> cast(prepared_claims, @allowed_fields)
     |> validate_required(@required_fields)
-    |> adapter().insert(prefix: prefix())
+    |> adapter().insert(config())
   end
 
   @doc """
@@ -56,38 +54,24 @@ defmodule Guardian.DB.Token do
   def purge_expired_tokens do
     timestamp = Guardian.timestamp()
 
-    adapter().purge_expired_tokens(timestamp, prefix: prefix())
+    adapter().purge_expired_tokens(timestamp, config())
   end
 
   @doc false
   def destroy_by_sub(sub) do
-    adapter().delete_by_sub(sub, prefix: prefix())
+    adapter().delete_by_sub(sub, config())
   end
 
   @doc false
-  def query_schema do
-    {schema_name(), Token}
-  end
-
-  @doc false
-  def schema_name do
-    :guardian
-    |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.get(:schema_name, "guardian_tokens")
-  end
-
-  @doc false
-  def prefix do
-    :guardian
-    |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.get(:prefix, nil)
+  defp config do
+    Application.fetch_env!(:guardian, Guardian.DB)
   end
 
   @doc false
   def destroy_token(nil, claims, jwt), do: {:ok, {claims, jwt}}
 
   def destroy_token(model, claims, jwt) do
-    case adapter().delete(model, prefix: prefix()) do
+    case adapter().delete(model, config()) do
       {:error, _} -> {:error, :could_not_revoke_token}
       nil -> {:error, :could_not_revoke_token}
       _ -> {:ok, {claims, jwt}}
@@ -95,8 +79,6 @@ defmodule Guardian.DB.Token do
   end
 
   defp adapter do
-    :guardian
-    |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.get(:adapter, Guardian.DB.EctoAdapter)
+    Keyword.get(config(), :adapter, Guardian.DB.EctoAdapter)
   end
 end
