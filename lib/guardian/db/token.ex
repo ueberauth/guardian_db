@@ -16,7 +16,7 @@ defmodule Guardian.DB.Token do
     field(:typ, :string)
     field(:aud, :string)
     field(:iss, :string)
-    field(:sub, :string)
+    field(:sub, :map)
     field(:exp, :integer)
     field(:jwt, :string)
     field(:claims, :map)

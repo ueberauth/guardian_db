@@ -9,7 +9,7 @@ defmodule Guardian.DBTest do
          "jti" => "token-uuid",
          "typ" => "token",
          "aud" => "token",
-         "sub" => "the_subject",
+         "sub" => %{id: "the_subject"},
          "iss" => "the_issuer",
          "exp" => Guardian.timestamp() + 1_000_000_000
        }
@@ -27,7 +27,7 @@ defmodule Guardian.DBTest do
     assert token != nil
     assert token.jti == "token-uuid"
     assert token.aud == "token"
-    assert token.sub == "the_subject"
+    assert token.sub == %{id: "the_subject"}
     assert token.iss == "the_issuer"
     assert token.exp == context.claims["exp"]
     assert token.claims == context.claims
@@ -58,7 +58,7 @@ defmodule Guardian.DBTest do
       "jti" => "token-uuid1",
       "typ" => "token",
       "aud" => "token",
-      "sub" => "the_subject",
+      "sub" => %{id: "the_subject"},
       "iss" => "the_issuer",
       "exp" => Guardian.timestamp() + 2_000_000_000
     }
@@ -107,7 +107,7 @@ defmodule Guardian.DBTest do
   end
 
   test "revoke_all deletes all tokens of a sub" do
-    sub = "the_subject"
+    sub = %{id: "the_subject"}
 
     Token.create(
       %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp(), "sub" => sub},
