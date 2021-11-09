@@ -9,63 +9,74 @@ defmodule Guardian.DB.EctoAdapter do
 
   @behaviour Guardian.DB.Adapter
 
+  @default_schema_name "guardian_tokens"
+
   @impl true
   def one(claims, opts) do
     prefix = Keyword.get(opts, :prefix, nil)
+    repo = Keyword.get(opts, :repo)
+
     jti = Map.get(claims, "jti")
     aud = Map.get(claims, "aud")
 
-    query_schema()
+    opts
+    |> query_schema()
     |> where([token], token.jti == ^jti and token.aud == ^aud)
-    |> ecto_repo().one(prefix: prefix)
+    |> repo.one(prefix: prefix)
   end
 
   @impl true
   def insert(changeset, opts) do
     prefix = Keyword.get(opts, :prefix, nil)
-    ecto_repo().insert(changeset, prefix: prefix)
+    repo = Keyword.get(opts, :repo)
+
+    data =
+      changeset
+      |> Map.get(:data)
+      |> Ecto.put_meta(source: schema_name(opts))
+      |> Ecto.put_meta(prefix: prefix)
+
+    changeset = %{changeset | data: data}
+
+    repo.insert(changeset, prefix: prefix)
   end
 
   @impl true
   def delete(record, opts) do
     prefix = Keyword.get(opts, :prefix, nil)
-    ecto_repo().delete(record, prefix: prefix)
+    repo = Keyword.get(opts, :repo)
+
+    repo.delete(record, prefix: prefix)
   end
 
   @impl true
   def delete_by_sub(sub, opts) do
     prefix = Keyword.get(opts, :prefix, nil)
+    repo = Keyword.get(opts, :repo)
 
-    query_schema()
+    opts
+    |> query_schema()
     |> where([token], token.sub == ^sub)
-    |> ecto_repo().delete_all(prefix: prefix)
+    |> repo.delete_all(prefix: prefix)
   end
 
   @impl true
   def purge_expired_tokens(timestamp, opts) do
     prefix = Keyword.get(opts, :prefix, nil)
+    repo = Keyword.get(opts, :repo)
     timestamp = Guardian.timestamp()
 
-    query_schema()
+    opts
+    |> query_schema()
     |> where([token], token.exp < ^timestamp)
-    |> ecto_repo().delete_all(prefix: prefix)
+    |> repo.delete_all(prefix: prefix)
   end
 
-  @doc false
-  def query_schema do
-    {schema_name(), Token}
+  defp query_schema(opts) do
+    {schema_name(opts), Token}
   end
 
-  @doc false
-  def schema_name do
-    :guardian
-    |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.get(:schema_name, "guardian_tokens")
-  end
-
-  def ecto_repo do
-    :guardian
-    |> Application.fetch_env!(Guardian.DB)
-    |> Keyword.fetch!(:repo)
+  defp schema_name(opts) do
+    Keyword.get(opts, :schema_name, @default_schema_name)
   end
 end

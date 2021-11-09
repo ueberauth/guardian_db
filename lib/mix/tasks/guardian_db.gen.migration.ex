@@ -28,17 +28,20 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
         |> Application.app_dir()
         |> Path.join("priv/templates/migration.exs.eex")
 
+      config = Application.fetch_env!(:guardian, Guardian.DB)
+
       schema_name =
-        :guardian
-        |> Application.fetch_env!(Guardian.DB)
+        config
         |> Keyword.get(:schema_name, "guardian_tokens")
         |> String.to_atom()
+
+      prefix = Keyword.get(config, :prefix, nil)
 
       generated_file =
         EEx.eval_file(source_path,
           module_prefix: app_module(),
           schema_name: schema_name,
-          db_prefix: Token.prefix()
+          db_prefix: prefix
         )
 
       target_file = Path.join(path, "#{timestamp()}_guardiandb.exs")

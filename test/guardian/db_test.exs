@@ -125,6 +125,6 @@ defmodule Guardian.DBTest do
     )
 
     assert Guardian.DB.revoke_all(sub) == {:ok, 3}
-    assert Repo.all(Token.query_schema()) == []
+    assert Repo.all({"guardian_tokens", Token}) == []
   end
 end

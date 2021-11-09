@@ -1,31 +1,75 @@
-defmodule Guardian.DB.Token.SweeperTest do
-  use Guardian.DB.TestSupport.CaseTemplate
+defmodule Guardian.DB.SweeperTest do
+  use ExUnit.Case
 
-  alias Guardian.DB.Token
-  alias Guardian.DB.Token.Sweeper
+  import Mox
 
-  test "purge stale tokens" do
-    Token.create(
-      %{"jti" => "token1", "aud" => "token", "exp" => Guardian.timestamp() + 5000},
-      "Token 1"
+  alias Guardian.DB.{Sweeper, Token}
+
+  setup_all context do
+    config = Application.get_env(:guardian, Guardian.DB)
+
+    Application.put_env(
+      :guardian,
+      Guardian.DB,
+      Keyword.put(config, :adapter, Guardian.DB.MockAdapter)
     )
 
-    Token.create(
-      %{"jti" => "token2", "aud" => "token", "exp" => Guardian.timestamp() - 5000},
-      "Token 2"
-    )
+    on_exit(fn ->
+      Application.put_env(:guardian, Guardian.DB, config)
+    end)
 
-    interval = 0
-    state = %{interval: interval}
-    new_state = Sweeper.sweep(state)
+    {:ok, context}
+  end
 
-    token1 = get_token("token1")
-    token2 = get_token("token2")
+  describe "handle_cast/2" do
+    setup :verify_on_exit!
 
-    assert token1 != nil
-    assert token2 == nil
+    test "resets the timer" do
+      ref = Process.send_after(__MODULE__, :sweep, 1_000_000_000)
 
-    assert new_state[:timer] != nil
-    assert_receive :sweep, interval + 10
+      assert {:noreply, [interval: 1_000_000_000, timer: timer]} =
+               Sweeper.handle_cast(:reset_timer, timer: ref, interval: 1_000_000_000)
+
+      assert ref != timer
+      assert is_reference(timer)
+
+      Process.cancel_timer(timer)
+    end
+
+    test "triggers a sweep and resets the timer" do
+      expect(Guardian.DB.MockAdapter, :purge_expired_tokens, fn _, _ ->
+        {0, []}
+      end)
+
+      ref = Process.send_after(__MODULE__, :sweep, 1_000_000_000)
+
+      assert {:noreply, [interval: 1_000_000_000, timer: timer]} =
+               Sweeper.handle_cast(:sweep, timer: ref, interval: 1_000_000_000)
+
+      assert ref != timer
+      assert is_reference(timer)
+
+      Process.cancel_timer(timer)
+    end
+  end
+
+  describe "handle_info/2" do
+    setup :verify_on_exit!
+
+    test "triggers a sweep and resets the timer" do
+      expect(Guardian.DB.MockAdapter, :purge_expired_tokens, fn _, _ ->
+        {0, []}
+      end)
+
+      ref = Process.send_after(__MODULE__, :sweep, 1_000_000_000)
+
+      assert {:noreply, [interval: 1_000_000_000, timer: timer]} =
+               Sweeper.handle_info(:sweep, timer: ref, interval: 1_000_000_000)
+
+      assert ref != timer
+      assert is_reference(timer)
+
+      Process.cancel_timer(timer)
+    end
   end
 end
