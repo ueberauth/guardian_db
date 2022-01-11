@@ -7,7 +7,7 @@ defmodule Guardian.DB do
   make a token inactive is to set the expiry and wait until it arrives.
 
   `Guardian.DB` takes an active role and stores each token in the database
-  verifying it's presense (based on it's jti) when `Guardian` verifies the
+  verifying it's presence (based on it's jti) when `Guardian` verifies the
   token.
   If the token is not present in the DB, the `Guardian` token cannot be
   verified.
