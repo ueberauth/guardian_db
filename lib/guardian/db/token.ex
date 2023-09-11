@@ -36,6 +36,11 @@ defmodule Guardian.DB.Token do
   Create a new token based on the JWT and decoded claims.
   """
   def create(claims, jwt) do
+    adapter().insert(changeset(claims, jwt), config())
+  end
+
+  @doc false
+  def changeset(claims, jwt) do
     prepared_claims =
       claims
       |> Map.put("jwt", jwt)
@@ -44,7 +49,6 @@ defmodule Guardian.DB.Token do
     %Token{}
     |> cast(prepared_claims, @allowed_fields)
     |> validate_required(@required_fields)
-    |> adapter().insert(config())
   end
 
   @doc """
