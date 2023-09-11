@@ -15,6 +15,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: guardian_db_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -37,8 +38,6 @@ jobs:
           mix deps.get
       - name: Run Tests
         run: mix test
-        env:
-          DB_HOST: postgres
 
   Linting:
     runs-on: ubuntu-latest
