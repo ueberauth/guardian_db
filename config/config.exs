@@ -12,6 +12,6 @@ config :guardian_db, Guardian.DB.TestSupport.Repo,
   database: "guardian_db_test",
   pool: Ecto.Adapters.SQL.Sandbox,
   priv: "priv/temp/guardian_db_test",
-  hostname: Map.get(System.get_env(), "DB_HOST", "localhost"),
+  hostname: "localhost",
   username: "postgres",
   password: "postgres"

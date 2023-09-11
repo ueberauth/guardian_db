@@ -64,7 +64,6 @@ defmodule Guardian.DB.EctoAdapter do
   def purge_expired_tokens(timestamp, opts) do
     prefix = Keyword.get(opts, :prefix, nil)
     repo = Keyword.get(opts, :repo)
-    timestamp = Guardian.timestamp()
 
     opts
     |> query_schema()

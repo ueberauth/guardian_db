@@ -5,7 +5,6 @@ defmodule Guardian.DB.Token do
 
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query, only: [where: 3]
 
   alias Guardian.DB.Token
 
