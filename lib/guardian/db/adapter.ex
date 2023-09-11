@@ -6,7 +6,6 @@ defmodule Guardian.DB.Adapter do
   for Guardian Tokens.
   """
 
-
   @typep schema :: Ecto.Schema.t()
   @typep changeset :: Ecto.Changeset.t()
   @typep schema_or_changeset :: schema() | changeset()
@@ -14,7 +13,6 @@ defmodule Guardian.DB.Adapter do
   @typep exp :: pos_integer()
   @typep sub :: binary()
   @typep opts :: keyword()
-
 
   @doc """
   Retrieves JWT token
