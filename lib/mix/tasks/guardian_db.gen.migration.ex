@@ -11,7 +11,6 @@ defmodule Mix.Tasks.Guardian.Db.Gen.Migration do
 
   import Mix.Ecto
   import Mix.Generator
-  alias Guardian.DB.Token
 
   @doc false
   def run(args) do

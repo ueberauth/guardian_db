@@ -75,8 +75,6 @@ defmodule Guardian.DB.ETSAdapter do
     |> delete_many(table)
   end
 
-  defp expired_tokens({_jti, _aud, _sub, token}, exp), do: token.exp < exp
-
   defp delete_many(tokens, table) do
     deleted_tokens =
       Enum.reduce(tokens, [], fn [jti, token], acc ->
