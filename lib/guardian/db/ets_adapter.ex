@@ -52,6 +52,8 @@ defmodule Guardian.DB.ETSAdapter do
       Please ensure you've created the table before attempting to delete records.
       """
     end
+
+    {:ok, token}
   end
 
   @impl true
