@@ -28,7 +28,7 @@ defmodule Guardian.DB.ETSAdapter do
 
     unless :ets.insert(table, {token.jti, token.aud, token.sub, token.exp, token}) do
       raise """
-      An error occurred trying to insert a new record into the ETS table #{table}. 
+      An error occurred trying to insert a new record into the ETS table #{table}.
 
       Please ensure you've created the table before attempting to insert records.
       """
@@ -45,10 +45,12 @@ defmodule Guardian.DB.ETSAdapter do
   def delete(%{jti: jti} = token, opts) do
     table = Keyword.fetch!(opts, :table)
 
-    if :ets.delete(table, jti) do
-      {:ok, token}
-    else
-      {:error, token}
+    unless :ets.delete(table, jti) do
+      raise """
+      An error occurred trying to delete a record from the ETS table #{table}.
+
+      Please ensure you've created the table before attempting to delete records.
+      """
     end
   end
 
