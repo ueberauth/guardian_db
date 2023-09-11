@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.0.0
+
+* Introduced `Guardian.DB.Adapter` behaviour to allow for custom database adapters to be used with Guardian DB.
+  Add`config :guardian, Guardian.DB, adapter: Guardian.DB.EctoAdapter` to fallback to the default Ecto adapter.
+* Allow migrations mix task with custom table name.
+* Make `jti` and `aud` required fields, since they are primary keys.
+
+### Breaking changes
+
+* `Guardian.DB.Token.SweeperServer` becomes `Guardian.DB.Sweeper`
+
 ## v2.0.2
 
 * Fix deps range to include Guardian 2
