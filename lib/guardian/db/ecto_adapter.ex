@@ -46,7 +46,7 @@ defmodule Guardian.DB.EctoAdapter do
     prefix = Keyword.get(opts, :prefix, nil)
     repo = Keyword.get(opts, :repo)
 
-    repo.delete(record, prefix: prefix)
+    repo.delete(record, prefix: prefix, stale_error_field: :stale_token)
   end
 
   @impl true
