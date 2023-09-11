@@ -33,16 +33,16 @@ defmodule Guardian.DB do
   * `prefix` - The schema prefix to use.
   * `schema_name` - The name of the schema to use. Default "guardian_tokens".
   * `sweep_interval` - The interval between db sweeps to remove old tokens.
-  Default 60 (mins).
+  Default 60 (minutes).
 
   ### Sweeper
 
   In order to sweep your expired tokens from the db, you'll need to add
-  `Guardian.DB.Token.SweeperServer` to your supervision tree.
+  `Guardian.DB.Sweeper` to your supervision tree.
   In your supervisor add it as a worker
 
   ```elixir
-  worker(Guardian.DB.Token.SweeperServer, [])
+  worker(Guardian.DB.Sweeper, [interval: 60])
   ```
 
   # Migration
@@ -69,7 +69,7 @@ defmodule Guardian.DB do
 
   ```elixir
   config :guardian, Guardian.DB,
-    schema_name: "my_customy_custom_schema
+    schema_name: "my_custom_schema
   ```
 
   And when you run `mix guardian.db.gen.migration` it'll generate the following
