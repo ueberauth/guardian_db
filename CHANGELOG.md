@@ -3,7 +3,9 @@
 ## v3.0.0
 
 * Introduced `Guardian.DB.Adapter` behaviour to allow for custom database adapters to be used with Guardian DB.
-  Add`config :guardian, Guardian.DB, adapter: Guardian.DB.EctoAdapter` to fallback to the default Ecto adapter.
+  - Add `config :guardian, Guardian.DB, adapter: Guardian.DB.EctoAdapter` to fall back to the default Ecto adapter.
+  - Added `Guardian.DB.ETSAdapter`.
+  - Added `Guardian.DB.EctoAdapter`.
 * Allow migrations mix task with custom table name.
 * Make `jti` and `aud` required fields, since they are primary keys.
 
