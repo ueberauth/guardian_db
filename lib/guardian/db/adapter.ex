@@ -17,11 +17,6 @@ defmodule Guardian.DB.Adapter do
   @typep id :: pos_integer() | binary() | Ecto.UUID.t()
 
   @doc """
-  Optional callback for creating a changeset
-  """
-  @callback changeset(map(), opts()) :: changeset()
-
-  @doc """
   Retrieves JWT token
   Used in `Guardian.DB.Token.find_by_claims/1`
   """
