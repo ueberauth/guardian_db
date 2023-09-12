@@ -54,7 +54,7 @@ defmodule Guardian.DB.Mixfile do
 
   defp package do
     [
-      maintainers: ["Daniel Neighman", "Sean Callan", "Sonny Scroggin"],
+      maintainers: ["Daniel Neighman", "Sean Callan", "Sonny Scroggin", "Yordis Prieto"],
       licenses: ["MIT"],
       links: %{GitHub: @source_url},
       files: [
