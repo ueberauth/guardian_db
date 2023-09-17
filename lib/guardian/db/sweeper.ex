@@ -5,9 +5,14 @@ defmodule Guardian.DB.Sweeper do
   To leverage the automated Sweeper functionality update your project's Application
   file to include the following child in your supervision tree:
 
+  * `interval` - The interval between db sweeps to remove old tokens, in
+  milliseconds. Defaults to 1 hour.
+
   ## Example
 
-    worker(Guardian.DB.Sweeper, [interval: 60])
+  ```elixir
+    worker(Guardian.DB.Sweeper, [interval: 60 * 60 * 1000])
+  ```
   """
   use GenServer
 

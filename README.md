@@ -40,15 +40,14 @@ config :guardian, Guardian.DB,
   repo: MyApp.Repo, # Add your repository module
   schema_name: "guardian_tokens", # default
   token_types: ["refresh_token"], # store all token types if not set
-  sweep_interval: 60 # default: 60 minutes
 ```
 
 To sweep expired tokens from your db you should add
-`Guardian.DB.Token.SweeperServer` to your supervision tree.
+`Guardian.DB.Sweeper` to your supervision tree.
 
 ```elixir
 children = [
-  {Guardian.DB.Token.SweeperServer, []}
+  {Guardian.DB.Sweeper, [interval: 60 * 60 * 1000]} # 1 hour
 ]
 ```
 
@@ -173,8 +172,8 @@ approach to authentication!
 
 ### Create your own Repo
 
-We created `Guardian.DB.Adapter` behaviour to allow creating other repositories for persisting JWT tokens. 
-You need to implement the `Guardian.DB.Adapter` behavior working with your preferred storage.     
+We created `Guardian.DB.Adapter` behaviour to allow creating other repositories for persisting JWT tokens.
+You need to implement the `Guardian.DB.Adapter` behavior working with your preferred storage.
 
 ### Adapters
 

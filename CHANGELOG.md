@@ -12,6 +12,8 @@
 ### Breaking changes
 
 * `Guardian.DB.Token.SweeperServer` becomes `Guardian.DB.Sweeper`
+* `sweep_interval` option is no longer supported. Specify interval directly instead.
+* Sweep intervals are now specified in milliseconds instead of minutes.
 
 ## v2.0.2
 
