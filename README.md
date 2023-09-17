@@ -47,7 +47,7 @@ To sweep expired tokens from your db you should add
 
 ```elixir
 children = [
-  {Guardian.DB.Sweeper, [interval: 60]}
+  {Guardian.DB.Sweeper, [interval: 60 * 60 * 1000]} # 1 hour
 ]
 ```
 
