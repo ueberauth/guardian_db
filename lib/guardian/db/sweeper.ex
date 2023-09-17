@@ -13,10 +13,10 @@ defmodule Guardian.DB.Sweeper do
 
   alias Guardian.DB.Token
 
-  @sixty_minutes 60 * 60 * 1000
+  @sixty_minutes 60
 
   def start_link(opts) do
-    interval = Keyword.get(opts, :interval, @sixty_minutes)
+    interval = Keyword.get(opts, :interval, @sixty_minutes) |> minute_to_ms()
     GenServer.start_link(__MODULE__, [interval: interval], name: __MODULE__)
   end
 
@@ -67,4 +67,13 @@ defmodule Guardian.DB.Sweeper do
 
     [interval: interval, timer: timer]
   end
+
+  defp minute_to_ms(value) when is_binary(value) do
+    value
+    |> String.to_integer()
+    |> minute_to_ms()
+  end
+
+  defp minute_to_ms(value) when value < 1, do: 1000
+  defp minute_to_ms(value), do: round(value * 60 * 1000)
 end
