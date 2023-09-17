@@ -32,8 +32,6 @@ defmodule Guardian.DB do
 
   * `prefix` - The schema prefix to use.
   * `schema_name` - The name of the schema to use. Default "guardian_tokens".
-  * `sweep_interval` - The interval between db sweeps to remove old tokens.
-  Default 60 (minutes).
 
   ### Sweeper
 
