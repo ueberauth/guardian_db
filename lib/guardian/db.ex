@@ -39,8 +39,11 @@ defmodule Guardian.DB do
   `Guardian.DB.Sweeper` to your supervision tree.
   In your supervisor add it as a worker
 
+  * `interval` - The interval between db sweeps to remove old tokens, in
+  milliseconds. Defaults to 1 hour.
+
   ```elixir
-  worker(Guardian.DB.Sweeper, [interval: 60])
+  worker(Guardian.DB.Sweeper, [interval: 60 * 60 * 1000])
   ```
 
   # Migration
