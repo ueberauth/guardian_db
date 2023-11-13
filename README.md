@@ -18,7 +18,7 @@ To install `Guardian.DB`, first add it to your `mix.exs` file:
 ```elixir
 defp deps do
   [
-    {:guardian_db, "~> 2.0"}
+    {:guardian_db, "~> 3.0"}
   ]
 end
 ```
@@ -37,10 +37,14 @@ run `mix guardian.db.gen.migration` to generate a migration.
 
 ```elixir
 config :guardian, Guardian.DB,
+  adapter: Guardian.DB.EctoAdapter, # default
   repo: MyApp.Repo, # Add your repository module
   schema_name: "guardian_tokens", # default
   token_types: ["refresh_token"], # store all token types if not set
 ```
+
+To use [ETS](https://hexdocs.pm/elixir/1.16/erlang-term-storage.html) instead
+of Ecto for storing tokens, you can set `adapter` to `Guardian.DB.ETSAdapter`.
 
 To sweep expired tokens from your db you should add
 `Guardian.DB.Sweeper` to your supervision tree.
