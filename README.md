@@ -115,8 +115,8 @@ And when you run the migration, it'll generate the following migration:
 ```elixir
   create table(:my_custom_schema, primary_key: false) do
     add(:jti, :string, primary_key: true)
+    add(:aud, :string, primary_key: true)
     add(:typ, :string)
-    add(:aud, :string)
     add(:iss, :string)
     add(:sub, :string)
     add(:exp, :bigint)
