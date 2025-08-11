@@ -207,7 +207,7 @@ defmodule Guardian.DB do
 
     def revoke_all(resource, claims) do
       with {:ok, sub} <- subject_for_token(resource, claims) do
-        Guardian.DB.revoke_all(resource)
+        Guardian.DB.revoke_all(sub)
       end
     end
   end
